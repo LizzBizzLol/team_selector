@@ -1,3 +1,8 @@
 from django.contrib import admin
+from .models import Skill, Student, StudentSkill, TaskRequirement, Task
 
-# Register your models here.
+admin.site.register(Skill)
+admin.site.register(Student)
+admin.site.register(StudentSkill)
+admin.site.register(TaskRequirement)
+admin.site.register(Task)

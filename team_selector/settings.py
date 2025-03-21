@@ -77,8 +77,12 @@ WSGI_APPLICATION = 'team_selector.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'team_selector',      # Название вашей базы данных
+        'USER': 'postgres',      # Пользователь базы данных
+        'PASSWORD': '123121',  # Пароль для пользователя
+        'HOST': 'localhost',         # Хост, где запущена база (обычно localhost)
+        'PORT': '5432',              # Порт PostgreSQL (по умолчанию 5432)
     }
 }
 
