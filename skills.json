@@ -1,0 +1,5 @@
+{
+    "students": [
+      { "id": 1, "skills": { "Django": 0.53, "Flask": 0.34 } }
+    ]
+  }
