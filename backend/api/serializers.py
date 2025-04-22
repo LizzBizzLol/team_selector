@@ -9,7 +9,7 @@ class SkillLevelSerializer(serializers.ModelSerializer):
         fields = ('id', 'skill_name', 'level')
 
 class UserSerializer(serializers.ModelSerializer):
-    skills = SkillLevelSerializer(source='userskill_set', many=True)
+    skills = SkillLevelSerializer(many=True, read_only=True)
 
     class Meta:
         model = User
@@ -32,9 +32,12 @@ class ProjectSerializer(serializers.ModelSerializer):
         read_only_fields = ['creator']
 
 class RequirementSerializer(serializers.ModelSerializer):
+    # делаем целым числом 1‑5
+    level_required = serializers.IntegerField(min_value=1, max_value=5)
+
     class Meta:
         model = Requirement
-        fields = '__all__'
+        fields = "__all__"
 
 class TeamSerializer(serializers.ModelSerializer):
     class Meta:
