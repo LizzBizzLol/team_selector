@@ -1,26 +1,69 @@
-import React from 'react';
-import ProjectForm from './components/ProjectForm';
-import UserForm from './components/UserForm';
-import ProjectList from './components/ProjectList';
-import UserList from './components/UserList';
-import SkillList from './components/SkillList';
-import ImportSkills from './components/ImportSkills';
-import MatchProject from './components/MatchProject';
+import React from "react";
+import {
+  BrowserRouter, Routes, Route,
+  NavLink, useParams
+} from "react-router-dom";
 
-function App() {
-  return (
-    <div className="App">
-      <h1>Team Selector</h1>
+import { CreateProjectPage, ProjectCard } from "./pages/ProjectPages";
 
-      <ProjectForm />
-      <UserForm />
-      <UserList />
-      <SkillList />
-      <ImportSkills projectId={1} />
-      <ProjectList />
-      <MatchProject projectId={1} />
-    </div>
-  );
+import ProjectForm   from "./components/ProjectForm";
+import UserForm      from "./components/UserForm";
+import ProjectList   from "./components/ProjectList";
+import UserList      from "./components/UserList";
+import SkillList     from "./components/SkillList";
+import ImportSkills  from "./components/ImportSkills";
+import MatchProject  from "./components/MatchProject";
+import AdminDashboard from "./pages/AdminDashboard";
+
+/* ---------- обёртка для /project/:id ---------- */
+function ProjectWrapper() {
+  const { id } = useParams();
+  return <ProjectCard projectId={id} />;
 }
 
-export default App;
+/* ---------- навигационная ссылка с актив‑стилем ---------- */
+const NavItem = ({ to, children }) => (
+  <NavLink
+    to={to}
+    className={({ isActive }) =>
+      `px-3 py-2 rounded-lg hover:bg-blue-50 ${
+        isActive ? "bg-blue-100 text-blue-700 font-medium" : "text-blue-600"
+      }`
+    }
+  >
+    {children}
+  </NavLink>
+);
+
+export default function App() {
+  return (
+    <BrowserRouter>
+      {/* ==== фикс‑шапка ==== */}
+      <header className="sticky top-0 bg-white/80 backdrop-blur border-b shadow-sm">
+        <div className="max-w-5xl mx-auto flex items-center gap-4 px-6 py-3">
+          {/* «логотип» — ведёт на /create */}
+          <NavItem to="/create" className="mr-auto">
+            <span className="font-bold">Коммандо</span>
+          </NavItem>
+
+          {/* нав‑ссылки */}
+          <NavItem to="/create">Создать проект</NavItem>
+          <NavItem to="/project/1">Проект #1</NavItem>
+          <NavItem to="/admin">Админ‑панель</NavItem>
+        </div>
+      </header>
+
+      {/* ==== страницы ==== */}
+      <Routes>
+        <Route path="/create"     element={<CreateProjectPage />} />
+        <Route path="/project/:id" element={<ProjectWrapper   />} />
+
+        {/* «админка» со старыми формами */}
+        <Route path="/admin" element={<AdminDashboard />} />
+
+        {/* любой неизвестный путь → /create */}
+        <Route path="*" element={<CreateProjectPage />} />
+      </Routes>
+    </BrowserRouter>
+  );
+}
