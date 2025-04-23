@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import axios from 'axios';
+import api from '../api';
 
 const MatchProject = ({ projectId }) => {
   const [team, setTeam] = useState(null);
@@ -7,8 +7,7 @@ const MatchProject = ({ projectId }) => {
 
   const handleMatch = async () => {
     try {
-      const res = await axios.post(
-        `http://127.0.0.1:8000/api/projects/${projectId}/match/`,
+      const res = await api.post(`projects/${projectId}/match/`,
         {},
         { headers: { 'Content-Type': 'application/json' } }
       );

@@ -2,9 +2,22 @@ from django.db import models
 
 # Пользователь / Студент
 class User(models.Model):
-    name = models.CharField(max_length=100)
-    email = models.EmailField(unique=True)
-    created_at = models.DateTimeField(auto_now_add=True)
+    CURATOR  = "curator"
+    STUDENT  = "student"
+
+    ROLE_CHOICES = [
+        (CURATOR,  "Куратор"),
+        (STUDENT,  "Студент"),
+    ]
+
+    name        = models.CharField(max_length=100)
+    email       = models.EmailField(unique=True)
+    role        = models.CharField(
+        max_length=8,
+        choices=ROLE_CHOICES,
+        default=STUDENT,
+    )
+    created_at  = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return self.name
@@ -20,7 +33,14 @@ class Skill(models.Model):
 class Project(models.Model):
     title = models.CharField(max_length=200)
     description = models.TextField(blank=True)
-    creator = models.ForeignKey(User, on_delete=models.CASCADE)
+    #куратор — любой пользователь; при удалении User проект остаётся
+    curator = models.ForeignKey(
+        "User", on_delete=models.SET_NULL,
+        null=True, related_name="curated_projects"
+    )
+
+    min_participants = models.PositiveSmallIntegerField(default=2)
+    max_participants = models.PositiveSmallIntegerField(default=5)
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
@@ -29,8 +49,8 @@ class Project(models.Model):
 # Требование к проекту: навык + нужный уровень
 class Requirement(models.Model):
     project = models.ForeignKey(Project, on_delete=models.CASCADE, related_name="requirements")
-    skill = models.ForeignKey(Skill, on_delete=models.CASCADE)
-    level_required = models.FloatField()  # Например: 0.8, 1.0
+    skill   = models.ForeignKey(Skill,   on_delete=models.CASCADE)
+    level_required = models.PositiveSmallIntegerField()   # 1-5
 
 # Связь пользователя и его уровня навыков
 class UserSkill(models.Model):

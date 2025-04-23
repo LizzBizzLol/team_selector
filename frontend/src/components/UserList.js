@@ -1,40 +1,32 @@
-import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+import { useEffect, useState } from "react";
+import api from "../api";
 
-const UsersList = () => {
-  const [users, setUsers] = useState([]);
-  const [skillsMap, setSkillsMap] = useState({});
+export default function UsersList() {
+    const [users, setUsers] = useState([]);
+    const [skillsMap] = useState({});
 
   useEffect(() => {
-    // Загружаем пользователей
-    axios.get('http://127.0.0.1:8000/api/users/')
-      .then(res => setUsers(res.data))
-      .catch(err => console.error(err));
-
-    // Загружаем все скиллы и создаём мапу id -> name
-    axios.get('http://127.0.0.1:8000/api/skills/')
-      .then(res => {
-        const map = {};
-        res.data.forEach(skill => {
-          map[skill.id] = skill.name;
-        });
-        setSkillsMap(map);
-      })
-      .catch(err => console.error(err));
+    api.get("users/")
+       .then(({ data }) => setUsers(data))
+       .catch(console.error);
   }, []);
 
   return (
     <div>
       <h2>Список пользователей</h2>
       <ul>
-        {users.map(user => (
-          <li key={user.id}>
-            {user.name}
-            {user.skills?.length > 0 && (
-              <ul>
-                {user.skills.map(us => (
-                  <li key={us.id}>
-                    {skillsMap[us.skill]} (уровень {us.level})
+        {users.map((u) => (
+          <li key={u.id} className="mb-2">
+            <strong>{u.name}</strong>{" "}
+            <span className="text-xs text-gray-500">
+              ({u.role === "curator" ? "Куратор" : "Студент"})
+            </span>
+
+            {u.skills?.length > 0 && (
+              <ul className="list-disc pl-6 text-sm">
+                {u.skills.map((s) => (
+                  <li key={s.skill_name}>
+                    {s.skill_name} — {s.level}
                   </li>
                 ))}
               </ul>
@@ -44,6 +36,4 @@ const UsersList = () => {
       </ul>
     </div>
   );
-};
-
-export default UsersList;
+}

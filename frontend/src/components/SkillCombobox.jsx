@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { Combobox } from "@headlessui/react";
 import { CheckIcon, ChevronUpDownIcon } from "@heroicons/react/20/solid";
-import axios from "axios";
+import api from '../api';
 
 export default function SkillCombobox({ value, onChange }) {
   const [query, setQuery] = useState("");
@@ -10,9 +10,7 @@ export default function SkillCombobox({ value, onChange }) {
   // подгружаем варианты
   useEffect(() => {
     const load = async () => {
-      const { data } = await axios.get("/api/skills/", {
-        params: { search: query }
-      });
+      const { data } = await api.get("skills/",   { params:{search:query} })
       setSkills(data);
     };
     const t = setTimeout(load, 300);      // debounce 300 мс
