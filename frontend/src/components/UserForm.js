@@ -5,10 +5,11 @@ const UserForm = () => {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [role, setRole] = useState('student');
+  const [errors, setErrors] = useState({});
 
   const handleSubmit = (e) => {
     e.preventDefault();
-
+    setErrors({});
     const newUser = {
       name: name,
       email: email
@@ -37,6 +38,9 @@ const UserForm = () => {
             onChange={(e) => setName(e.target.value)} 
             required 
           />
+          {errors.name && (
+            <p className="text-red-500 text-sm">{errors.name[0]}</p>
+          )}
         </label>
         <br />
         <label>
@@ -47,6 +51,9 @@ const UserForm = () => {
             onChange={(e) => setEmail(e.target.value)} 
             required 
           />
+          {errors.email && (
+            <p className="text-red-500 text-sm">{errors.email[0]}</p>
+          )}
         </label>
         <br />  
         <label className="block mt-2">

@@ -6,9 +6,11 @@ import api from '../api';
 const ProjectForm = () => {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
+  const [errors, setErrors] = useState({});
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    setErrors({});
 
     const newProject = {
       title: title,
@@ -21,9 +23,9 @@ const ProjectForm = () => {
         setTitle('');
         setDescription('');
       })
-      .catch(error => {
-        console.error('Ошибка при добавлении проекта:', error);
-      });
+      .catch(error => { // error.response.data будет объектом вида { title: ["…уже существует"], ... }
+        if (error.response?.data) {setErrors(error.response.data);} else {console.error(error);}
+        });
   };
 
   return (
@@ -38,6 +40,9 @@ const ProjectForm = () => {
             onChange={(e) => setTitle(e.target.value)} 
             required 
           />
+          {errors.title && (
+           <p className="text-red-500 text-sm">{errors.title[0]}</p>
+         )}
         </label>
         <br />
         <label>
