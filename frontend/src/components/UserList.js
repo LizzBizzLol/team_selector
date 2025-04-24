@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import api from "../api";
 
 export default function UsersList() {
     const [users, setUsers] = useState([]);
-    const [skillsMap] = useState({});
 
   useEffect(() => {
     api.get("users/")
@@ -17,7 +17,11 @@ export default function UsersList() {
       <ul>
         {users.map((u) => (
           <li key={u.id} className="mb-2">
-            <strong>{u.name}</strong>{" "}
+            <strong>
+              <Link to={`/user/${u.id}`} className="text-blue-600 hover:underline">
+                {u.name}
+              </Link>
+            </strong>{" "}
             <span className="text-xs text-gray-500">
               ({u.role === "curator" ? "Куратор" : "Студент"})
             </span>

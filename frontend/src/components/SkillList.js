@@ -5,7 +5,7 @@ const SkillList = () => {
   const [skills, setSkills] = useState([]);
 
   useEffect(() => {
-    api.get('/api/skills/')
+    api.get('skills/')
       .then(response => {
         setSkills(response.data);
       })

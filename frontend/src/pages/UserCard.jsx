@@ -14,8 +14,8 @@ export default function UserCard() {
 
   return (
     <div className="max-w-xl mx-auto mt-10 p-6 border rounded-xl shadow space-y-4">
-      <Link to="/projects" className="text-blue-600 hover:underline">
-        ← Все проекты
+      <Link to="/admin?tab=users" className="text-blue-600 hover:underline">
+        ← Кураторы
       </Link>
       
       <h1 className="text-2xl font-semibold">{user.name}</h1>

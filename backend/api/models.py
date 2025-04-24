@@ -10,7 +10,7 @@ class User(models.Model):
         (STUDENT,  "Студент"),
     ]
 
-    name        = models.CharField(max_length=100)
+    name        = models.CharField(max_length=100, unique=True)
     email       = models.EmailField(unique=True)
     role        = models.CharField(
         max_length=8,
@@ -31,8 +31,8 @@ class Skill(models.Model):
 
 # Проект
 class Project(models.Model):
-    title = models.CharField(max_length=200)
-    description = models.TextField(blank=True)
+    title = models.CharField(max_length=200, unique=True)
+    #description = models.TextField(blank=True) # пока не используем
     #куратор — любой пользователь; при удалении User проект остаётся
     curator = models.ForeignKey(
         "User", on_delete=models.SET_NULL,
@@ -41,16 +41,42 @@ class Project(models.Model):
 
     min_participants = models.PositiveSmallIntegerField(default=2)
     max_participants = models.PositiveSmallIntegerField(default=5)
+    # <----- NOVA: Many-to-Many через промежуточную таблицу
+    requirements = models.ManyToManyField(
+        "Requirement",
+        through="ProjectRequirement",
+        related_name="projects"
+    )
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return self.title
 
-# Требование к проекту: навык + нужный уровень
+# ─────────── УНИКАЛЬНОЕ «НАВЫК-УРОВЕНЬ» ───────────
 class Requirement(models.Model):
-    project = models.ForeignKey(Project, on_delete=models.CASCADE, related_name="requirements")
-    skill   = models.ForeignKey(Skill,   on_delete=models.CASCADE)
-    level_required = models.PositiveSmallIntegerField()   # 1-5
+    skill  = models.ForeignKey(Skill, on_delete=models.CASCADE)
+    level  = models.PositiveSmallIntegerField()           # 1-5
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(
+                fields=["skill", "level"],
+                name="unique_skill_level"
+            )
+        ]
+
+    def __str__(self):
+        return f"{self.skill} — уровень {self.level}"
+
+
+# ─────────── СВЯЗЬ «ПРОЕКТ ↔ ТРЕБОВАНИЕ» ───────────
+class ProjectRequirement(models.Model):
+    project     = models.ForeignKey("Project",     on_delete=models.CASCADE)
+    requirement = models.ForeignKey("Requirement", on_delete=models.CASCADE)
+
+    class Meta:
+        unique_together = ("project", "requirement")
+
 
 # Связь пользователя и его уровня навыков
 class UserSkill(models.Model):
