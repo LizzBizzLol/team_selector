@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import api from '../api';
 
 const SkillList = () => {
   const [skills, setSkills] = useState([]);
 
   useEffect(() => {
-    axios.get('http://127.0.0.1:8000/api/skills/')
+    api.get('/api/skills/')
       .then(response => {
         setSkills(response.data);
       })

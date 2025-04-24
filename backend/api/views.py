@@ -14,6 +14,16 @@ class UserViewSet(viewsets.ModelViewSet):
     queryset = User.objects.all()
     serializer_class = UserSerializer
 
+    def get_queryset(self):
+        qs = super().get_queryset()
+        role = self.request.query_params.get("role")
+        if role in [User.CURATOR, User.STUDENT]:
+            qs = qs.filter(role=role)
+        search = self.request.query_params.get("search")
+        if search:
+            qs = qs.filter(name__icontains=search)
+        return qs
+
 
 class SkillViewSet(viewsets.ModelViewSet):
     queryset = Skill.objects.all()
@@ -38,13 +48,13 @@ class TeamViewSet(viewsets.ModelViewSet):
 class ProjectViewSet(viewsets.ModelViewSet):
     queryset = Project.objects.all()
     serializer_class = ProjectSerializer
-    authentication_classes = []  # отключаем аутентификацию для разработки
-    permission_classes = [AllowAny]  # разрешаем все запросы
+    authentication_classes = []
+    permission_classes = [AllowAny]
 
+    # ↓ если нужен авто-куратор по умолчанию
     def perform_create(self, serializer):
-        # автоматически назначаем создателя: первый пользователь
-        default_user = User.objects.first()
-        serializer.save(creator=default_user)
+        default_curator = User.objects.filter(role=User.CURATOR).first()
+        serializer.save(curator=default_curator)
 
     @action(detail=True, methods=['post'])
     def import_skills(self, request, pk=None):
