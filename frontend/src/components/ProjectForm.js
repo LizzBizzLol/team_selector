@@ -1,5 +1,7 @@
+// TODO: удалить компонент, когда все проекты создаём через CreateProjectPage
+
 import React, { useState } from 'react';
-import axios from 'axios';
+import api from '../api';
 
 const ProjectForm = () => {
   const [title, setTitle] = useState('');
@@ -13,7 +15,7 @@ const ProjectForm = () => {
       description: description
     };
 
-    axios.post('http://127.0.0.1:8000/api/projects/', newProject)
+    api.post('/api/projects/', newProject)
       .then(response => {
         console.log('Проект добавлен:', response.data);
         setTitle('');

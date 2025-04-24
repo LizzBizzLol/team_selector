@@ -14,6 +14,8 @@ import SkillList     from "./components/SkillList";
 import ImportSkills  from "./components/ImportSkills";
 import MatchProject  from "./components/MatchProject";
 import AdminDashboard from "./pages/AdminDashboard";
+import Projects from "./pages/ProjectListPage";
+import UserCard from "./pages/UserCard";
 
 /* ---------- обёртка для /project/:id ---------- */
 function ProjectWrapper() {
@@ -43,13 +45,13 @@ export default function App() {
         <div className="max-w-5xl mx-auto flex items-center gap-4 px-6 py-3">
           {/* «логотип» — ведёт на /create */}
           <NavItem to="/create" className="mr-auto">
-            <span className="font-bold">Коммандо</span>
+            <span className="font-bold">Напарники</span>
           </NavItem>
 
           {/* нав‑ссылки */}
           <NavItem to="/create">Создать проект</NavItem>
-          <NavItem to="/project/1">Проект #1</NavItem>
           <NavItem to="/admin">Админ‑панель</NavItem>
+          <NavItem to="/projects">Все проекты</NavItem>
         </div>
       </header>
 
@@ -57,12 +59,12 @@ export default function App() {
       <Routes>
         <Route path="/create"     element={<CreateProjectPage />} />
         <Route path="/project/:id" element={<ProjectWrapper   />} />
-
+        <Route path="/projects"     element={<Projects />} />
         {/* «админка» со старыми формами */}
         <Route path="/admin" element={<AdminDashboard />} />
-
         {/* любой неизвестный путь → /create */}
         <Route path="*" element={<CreateProjectPage />} />
+        <Route path="/user/:id" element={<UserCard />} />
       </Routes>
     </BrowserRouter>
   );

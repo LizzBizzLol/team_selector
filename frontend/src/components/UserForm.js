@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
-import axios from 'axios';
+import api from '../api';
 
 const UserForm = () => {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
+  const [role, setRole] = useState('student');
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -13,7 +14,7 @@ const UserForm = () => {
       email: email
     };
 
-    axios.post('http://127.0.0.1:8000/api/users/', newUser)
+    api.post('/api/users/', newUser)
       .then(response => {
         console.log('Пользователь добавлен:', response.data);
         setName('');
@@ -47,7 +48,14 @@ const UserForm = () => {
             required 
           />
         </label>
-        <br />
+        <br />  
+        <label className="block mt-2">
+          Роль:
+          <select value={role} onChange={e=>setRole(e.target.value)} className="ml-2">
+          <option value="student">Студент</option>
+          <option value="curator">Куратор</option>
+          </select>
+        </label>
         <button type="submit">Добавить пользователя</button>
       </form>
     </div>

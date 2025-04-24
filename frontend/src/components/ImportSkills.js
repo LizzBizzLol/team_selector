@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import axios from 'axios';
+import api from '../api';
 
 const ImportSkills = ({ projectId }) => {
   const [file, setFile] = useState(null);
@@ -23,8 +23,8 @@ const ImportSkills = ({ projectId }) => {
       const data = JSON.parse(text);
 
       // отправляем на сервер
-      const url = `http://127.0.0.1:8000/api/projects/${projectId}/import_skills/`;
-      await axios.post(url, data, {
+      const url = `projects/${projectId}/import_skills/`;
+      await api.post(url, data, {
         headers: { 'Content-Type': 'application/json' }
       });
 
