@@ -1,9 +1,16 @@
-from django.contrib import admin
-from .models import User, Skill, UserSkill, Project, Requirement, Team
+# api/admin.py
 
-admin.site.register(User)
+from django.contrib import admin
+from .models import (
+    Curator, Student, Skill,
+    Project, ProjectSkill,
+    StudentSkill, Team
+)
+
+admin.site.register(Curator)
+admin.site.register(Student)
 admin.site.register(Skill)
-admin.site.register(UserSkill)
 admin.site.register(Project)
-admin.site.register(Requirement)
+admin.site.register(ProjectSkill)
+admin.site.register(StudentSkill)
 admin.site.register(Team)

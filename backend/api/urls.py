@@ -1,15 +1,20 @@
-from django.urls import path, include
+# api/urls.py
+
 from rest_framework.routers import DefaultRouter
-from .views import UserViewSet, SkillViewSet, UserSkillViewSet, ProjectViewSet, RequirementViewSet, TeamViewSet
+from .views import (
+    CuratorViewSet, StudentViewSet,
+    SkillViewSet, ProjectViewSet,
+    ProjectSkillViewSet,
+    StudentSkillViewSet, TeamViewSet
+)
 
 router = DefaultRouter()
-router.register(r'users', UserViewSet)
-router.register(r'skills', SkillViewSet)
-router.register(r'user_skills', UserSkillViewSet)
-router.register(r'projects', ProjectViewSet)
-router.register(r'requirements', RequirementViewSet)
-router.register(r'teams', TeamViewSet)
+router.register(r"curators", CuratorViewSet)
+router.register(r"students", StudentViewSet)
+router.register(r"skills", SkillViewSet)
+router.register(r"projects", ProjectViewSet)
+router.register(r"project_skills", ProjectSkillViewSet)
+router.register(r"student_skills", StudentSkillViewSet)
+router.register(r"teams", TeamViewSet)
 
-urlpatterns = [
-    path('', include(router.urls)),
-]
+urlpatterns = router.urls

@@ -1,14 +1,17 @@
 import { Tab } from "@headlessui/react";
 import { useSearchParams } from "react-router-dom";
 import ProjectList   from "../components/ProjectList";
-import UserList      from "../components/UserList";
+import CuratorList   from "../components/CuratorList";
+import StudentList   from "../components/StudentList";
 import SkillList     from "../components/SkillList";
 
 export default function AdminDashboard() {
   const [params] = useSearchParams();
-  const defaultIndex = params.get("tab") === "users" ? 1 :
-                      params.get("tab") === "skills" ? 2 : 0;
-  const tabs = ["Проекты", "Пользователи", "Навыки"];
+  const defaultIndex = params.get("tab") === "curators" ? 1 :
+                      params.get("tab") === "students" ? 2 :
+                      params.get("tab") === "skills" ? 3 : 0;
+  const tabs = ["Проекты", "Кураторы", "Студенты", "Навыки"];
+
   return (
     <div className="max-w-5xl mx-auto p-8">
       <h1 className="text-2xl font-semibold mb-6">Напарники — админ-панель</h1>
@@ -28,7 +31,8 @@ export default function AdminDashboard() {
 
         <Tab.Panels className="mt-6">
           <Tab.Panel><ProjectList /></Tab.Panel>
-          <Tab.Panel><UserList /></Tab.Panel>
+          <Tab.Panel><CuratorList /></Tab.Panel>
+          <Tab.Panel><StudentList /></Tab.Panel>
           <Tab.Panel><SkillList /></Tab.Panel>
         </Tab.Panels>
       </Tab.Group>

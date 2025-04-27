@@ -10,7 +10,19 @@ export default function ProjectList() {
       .then(({ data }) => setProjects(data))
       .catch((err) => console.error(err));
   }, []);
-
+  if (!projects.length) {
+    return (
+      <div className="max-w-2xl mx-auto p-8 text-center">
+        <p className="mb-4 text-gray-600">Пока нет ни одного проекта.</p>
+        <Link
+          to="/create"
+          className="inline-block bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+        >
+          Создать проект
+        </Link>
+      </div>
+    );
+  }
   return (
     <div className="overflow-x-auto">
       <h2 className="text-xl font-semibold mb-4">Список проектов</h2>
@@ -40,15 +52,10 @@ export default function ProjectList() {
               {/* ─ куратор → карточка пользователя ─ */}
               <td className="px-4 py-2">
                 {p.curator ? (
-                  <Link
-                    to={`/user/${p.curator}`}
-                    className="text-blue-600 hover:underline"
-                  >
-                    {p.curator_name || `Куратор #${p.curator}`}
+                  <Link to={`/user/${p.curator.id}`} className="text-blue-600 hover:underline">
+                    {p.curator.name}
                   </Link>
-                ) : (
-                  "—"
-                )}
+                ) : "—"}
               </td>
 
               {/* ─ min–max участников ─ */}

@@ -33,16 +33,13 @@ export default function SkillCombobox({ value, onChange }) {
         </Combobox.Button>
 
         {skills.length > 0 && (
-          <Combobox.Options className="absolute z-10 mt-1 max-h-56 w-full overflow-auto rounded-md
-                                        bg-white py-1 text-base shadow-lg ring-1 ring-black/5">
+          <Combobox.Options className="absolute z-10 mt-1 max-h-56 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black/5">
             {skills.map((s) => (
               <Combobox.Option
                 key={s.id}
                 value={s}
                 className={({ active }) =>
-                  `relative cursor-pointer select-none py-2 pl-10 pr-4 ${
-                    active ? 'bg-blue-600 text-white' : 'text-gray-900'
-                  }`
+                  `relative cursor-pointer select-none py-2 pl-10 pr-4 ${active ? 'bg-blue-600 text-white' : 'text-gray-900'}`
                 }
               >
                 {({ selected }) => (
@@ -60,6 +57,11 @@ export default function SkillCombobox({ value, onChange }) {
               </Combobox.Option>
             ))}
           </Combobox.Options>
+        )}
+        {query && skills.length === 0 && (
+          <div className="absolute z-10 mt-1 w-full bg-white py-2 px-3 text-gray-500">
+            Нет совпадений
+          </div>
         )}
       </div>
     </Combobox>
