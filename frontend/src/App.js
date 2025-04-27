@@ -4,18 +4,13 @@ import {
   NavLink, useParams
 } from "react-router-dom";
 
-import { CreateProjectPage, ProjectCard } from "./pages/ProjectPages";
-
-import ProjectForm   from "./components/ProjectForm";
-import UserForm      from "./components/UserForm";
-import ProjectList   from "./components/ProjectList";
-import UserList      from "./components/UserList";
-import SkillList     from "./components/SkillList";
-import ImportSkills  from "./components/ImportSkills";
-import MatchProject  from "./components/MatchProject";
+import CreateProjectPage, { ProjectCard } from "./pages/ProjectPages";
+// удалены устаревшие импорты ProjectForm, UserForm, ProjectList, UserList, SkillList,
+// ImportSkills, MatchProject — все остальное подключается внутри страниц
 import AdminDashboard from "./pages/AdminDashboard";
 import Projects from "./pages/ProjectListPage";
 import UserCard from "./pages/UserCard";
+import StudentCard from "./pages/StudentCards";
 
 /* ---------- обёртка для /project/:id ---------- */
 function ProjectWrapper() {
@@ -58,13 +53,14 @@ export default function App() {
       {/* ==== страницы ==== */}
       <Routes>
         <Route path="/create"     element={<CreateProjectPage />} />
-        <Route path="/project/:id" element={<ProjectWrapper   />} />
-        <Route path="/projects"     element={<Projects />} />
-        {/* «админка» со старыми формами */}
+        <Route path="/project/:id"element={<ProjectWrapper   />} />
+        <Route path="/projects"   element={<Projects />} />
+        {/* админ–панель */}
         <Route path="/admin" element={<AdminDashboard />} />
-        {/* любой неизвестный путь → /create */}
-        <Route path="*" element={<CreateProjectPage />} />
+        {/* прочие пути */}
         <Route path="/user/:id" element={<UserCard />} />
+        <Route path="/student/:id" element={<StudentCard />} />
+        <Route path="*"         element={<CreateProjectPage />} />
       </Routes>
     </BrowserRouter>
   );
