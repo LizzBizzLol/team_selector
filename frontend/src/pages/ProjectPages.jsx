@@ -2,7 +2,12 @@ import React, { useState, useEffect } from "react";
 import SkillCombobox from "../components/SkillCombobox";
 import UserCombobox from "../components/CuratorCombobox";
 import { Link } from "react-router-dom";
+import BackButton from "../components/BackButton"; // именно default-импорт
 import api from "../api";
+import { Dialog } from "@headlessui/react";
+import RequirementsTable from "../components/RequirementsTable";
+import useUnsavedPrompt from "../hooks/useUnsavedPrompt";
+
 
 /* -------------------------------------------------------------------
    CreateProjectPage – форма создания проекта
@@ -16,7 +21,12 @@ export default function CreateProjectPage() {
   const [totalStudents, setTotalStudents] = useState(1);
   const [errors, setErrors] = useState({});
   const [status, setStatus] = useState("");
+  const isDirty =
+  title.trim() !== "" ||
+  curator !== null ||
+  requirements.some(r => r.skill);
 
+useUnsavedPrompt(isDirty);
 
   // Загрузка общего числа студентов
   useEffect(() => {
@@ -171,7 +181,7 @@ export default function CreateProjectPage() {
       <form onSubmit={handleSubmit} className="space-y-6">
         {/* название */}
         <div>
-          <label className="block mb-1 font-medium">Название проекта</label>
+          <label className="block font-medium">Название проекта</label>
           <input
             className="border w-full px-3 py-2 rounded-lg focus:ring-2 focus:ring-blue-500"
             value={title}
@@ -309,6 +319,16 @@ export const ProjectCard = ({ projectId }) => {
   const [errors, setErrors] = useState({});
   const [status, setStatus] = useState("");
   const [curator, setCurator] = useState(null);
+  const [team, setTeam] = useState(null);       // успешный подбор
+  const [matchErr, setMatchErr] = useState(""); // текст ошибки
+  const [matching, setMatching] = useState(false);
+  const isDirty =
+  title.trim() !== "" ||
+  curator !== null ||
+  reqs.some(r => r.skill);
+
+useUnsavedPrompt(isDirty);  
+
 
   /* загрузка проекта + требований */
   const fetchData = async () => {
@@ -338,41 +358,41 @@ export const ProjectCard = ({ projectId }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [projectId]);
 
-  /* сохранение */
-  const save = async () => {
-    try {
+    /* сохранение ---------------------------------------------------- */
+    const save = async () => {
+      try {
+        /* 1 — PATCH самого проекта */
         await api.patch(`projects/${projectId}/`, {
-        title,
-        curator_id: curator?.id ?? null,
-      });
-        
-      /* добавляем / обновляем актуальные */
-      await Promise.all(
-        reqs.filter(r => r.skill)          // пропускаем пустые строки
-            .map(r =>
-          api.post(`projects/${projectId}/add_requirement/`, {
+          title,
+          curator_id: curator?.id ?? null,
+        });
+    
+        /* 2 — приводим reqs в «чистый» вид и отправляем одним PUT */
+        const cleaned = reqs.filter(r => Number.isInteger(r.skill));
+        setReqs(cleaned);                     // локальная синхронизация
+    
+        await api.put(`projects/${projectId}/sync_requirements/`, {
+          requirements: cleaned.map(r => ({
             skill: r.skill,
             level: r.level,
-          })
-        )
-      );
-      setErrors({});
-      setStatus("✔️ Сохранено"); 
-      setEdit(false);
-      fetchData();
-    } catch (err) {
-      if (err.response?.data && typeof err.response.data === "object") {
+          })),
+        });
+    
+        /* 3 — финал */
+        setStatus("✔️ Сохранено");
+        setEdit(false);
+        setErrors({});
+        fetchData();
+      } catch (err) {
         const msg =
-          err.response.data.detail ||
-          Object.values(err.response.data).flat().join(" ");
+          err.response?.data?.detail ||
+          Object.values(err.response?.data || {}).flat().join(" ") ||
+          err.message;
         setErrors({ save: [msg] });
         setStatus("Ошибка сохранения");
-      } else {
-        setErrors({ save: [err.message] });
-        setStatus("Ошибка сохранения");
       }
-    }
-  };
+    };
+      
 
   if (!project) return <p className="text-center mt-8">Загрузка…</p>;
 
@@ -380,15 +400,31 @@ export const ProjectCard = ({ projectId }) => {
   return (
     <div className="max-w-3xl mx-auto mt-12 p-8 border border-gray-300 rounded-xl shadow space-y-6">
       <div className="flex justify-between items-center mb-4">
-        <Link to="/projects" className="text-blue-600 hover:underline">
-          ← Все проекты
-        </Link>
+      <BackButton fallback="/projects" />
         <button
           onClick={() => (edit ? save() : setEdit(true))}
           className="px-3 py-1 border border-blue-600 text-blue-600 rounded hover:bg-blue-50"
         >
           {edit ? "Сохранить" : "Редактировать"}
         </button>
+        {!edit && (
+        <button
+          onClick={async () => {
+            setMatchErr(""); setTeam(null); setMatching(true);
+            try {
+              const { data } = await api.post(`projects/${projectId}/match/`);
+              if (data.students?.length) setTeam(data);
+              else setMatchErr(data.detail || "Команда пуста");
+            } catch (e) {
+              setMatchErr(e.response?.data?.detail || e.message);
+            } finally { setMatching(false); }
+          }}
+          className="px-3 py-1 border border-green-600 text-green-600 rounded hover:bg-green-50"
+        >
+          {matching ? "Подбор…" : "Сформировать команду"}
+        </button>
+        )}
+
         <button
           onClick={() => {
             if (!window.confirm("Удалить проект?")) return;
@@ -430,7 +466,7 @@ export const ProjectCard = ({ projectId }) => {
         {edit ? (
           <>
             {reqs.map((r, i) => (
-              <div key={r.skill || i} className="flex gap-2 mb-2 items-center">
+              <div key={`${r.skill ?? 'new'}-${i}`} className="flex gap-2 mb-2 items-center">
                 <SkillCombobox
                   value={{ id: r.skill, name: r.skill_name }}
                   onChange={(val) => {
@@ -457,22 +493,21 @@ export const ProjectCard = ({ projectId }) => {
                   type="button"
                   disabled={reqs.length === 1}
                   onClick={() => {
-                    if (reqs.length === 1) return;
-                    setReqs(reqs.filter((_, idx) => idx !== i));
-                    // удаляем связь сразу
-                    if (r.skill) {
-                      api.post(`projects/${projectId}/remove_requirement/`, { skill_id: r.skill })
-                      .then(() => {
-                      // обновляем локальные reqs, отфильтровав удалённый:
-                        setReqs((prev) =>
-                        prev.filter(item => item.skill !== r.skill)
-                        );
-                      });
+                    const payload =
+                      r.id ? { ps_id: r.id }           // у строки есть первичный ключ
+                      : r.skill ? { skill_id: r.skill }  // или хотя бы id навыка
+                      : null;                            // новая пустая – в БД её ещё нет
+                    
+                    if (payload) {
+                      api.post(`projects/${projectId}/remove_requirement/`, payload)
+                          .catch(console.error);
                     }
+                    /* локально убираем строку из state */
+                    setReqs(prev => prev.filter((_, idx) => idx !== i));
                   }}
                   className={`px-2 ${reqs.length === 1 ? "opacity-30" : "text-red-500"}`}
                 >
-                  ✖
+                ✖
                 </button>
               </div>
             ))}
@@ -487,15 +522,7 @@ export const ProjectCard = ({ projectId }) => {
             </button>
           </>
         ) : (
-          <ul className="list-disc pl-6 space-y-1">
-            {[...reqs]
-              .sort((a, b) => a.skill_name.localeCompare(b.skill_name))
-              .map((r) => (
-                <li key={r.skill}>
-                  {r.skill_name} — уровень {r.level}
-                </li>
-              ))}
-          </ul>
+          <RequirementsTable reqs={reqs} />
         )}
       </div>
 
@@ -516,7 +543,34 @@ export const ProjectCard = ({ projectId }) => {
         <p key={field} className="text-red-500 text-sm">
           {field}: {Array.isArray(msgs)? msgs.join(", "): msgs}
         </p>
-      ))} 
+      ))}
+      <Dialog open={!!team || !!matchErr} onClose={() => {setTeam(null); setMatchErr("");}}>
+      <div className="fixed inset-0 bg-black/30" aria-hidden="true" />
+        <div className="fixed left-1/2 top-1/3 w-96 max-w-full -translate-x-1/2 transform bg-white p-6 rounded-xl shadow-lg space-y-4">
+          <h2 className="text-lg font-medium">
+            Результат подбора
+          </h2>
+          {matchErr && <p className="text-red-600">{matchErr}</p>}
+          {team && (
+            <div>
+              <p className="mb-2 font-medium">
+                Команда #{team.id} • {team.students.length} чел.
+              </p>
+              <ul className="list-disc pl-5 space-y-1 max-h-60 overflow-y-auto">
+                {team.students.map(s=>(
+                  <li key={s.id}>{s.name} <span className="text-xs text-gray-400">({s.email})</span></li>
+                ))}
+              </ul>
+            </div>
+          )}
+          <button
+            className="mt-4 bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+            onClick={() => {setTeam(null); setMatchErr("");}}
+          >
+            ОК
+          </button>
+        </div>
+      </Dialog>
     </div>
   );
 };

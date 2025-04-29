@@ -3,6 +3,7 @@ from rest_framework.permissions import AllowAny
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from django.db.models import Q
+from django.db import transaction
 
 
 from .models import (
@@ -130,24 +131,106 @@ class ProjectViewSet(viewsets.ModelViewSet):
             link.save()
 
         return Response({"status": "added"}, status=status.HTTP_201_CREATED)
-
+    
+    
     @action(detail=True, methods=["post"])
     def remove_requirement(self, request, pk=None):
+        """
+        Принимает:
+        • ps_id      – id строки ProjectSkill
+        • ps_ids     – список таких id
+        • skill_id   – id навыка
+        • "*"        – удалить все требования
+        """
         project = self.get_object()
+
+        # ----- по id строки -----
+        ps_id  = request.data.get("ps_id")
+        ps_ids = request.data.get("ps_ids")
+        if ps_id or ps_ids:
+            ids = [ps_id] if ps_id else ps_ids
+            ProjectSkill.objects.filter(id__in=ids, project=project).delete()
+            return Response({"status": "removed"})
+
+        # ----- по skill_id или "*" -----
         skill_id = request.data.get("skill_id")
         if skill_id == "*":
             ProjectSkill.objects.filter(project=project).delete()
-        else:
-            ProjectSkill.objects.filter(
-                project=project, skill_id=skill_id
-            ).delete()
-        return Response({"status": "removed"})
+            return Response({"status": "removed"})
+        if skill_id:
+            ProjectSkill.objects.filter(project=project, skill_id=skill_id).delete()
+            return Response({"status": "removed"})
 
+        return Response(
+            {"detail": "нужен ps_id / ps_ids / skill_id"},
+            status=status.HTTP_400_BAD_REQUEST
+        )
 
-    # @action(detail=True, methods=["post"])
-    # def match(self, request, pk=None):
-    #     # временно отключено, чтобы не падало
-    #     return Response({"detail":"match disabled"}, status=status.HTTP_200_OK)
+    @action(detail=True, methods=["put"])
+    def sync_requirements(self, request, pk=None):
+        """
+        Полностью заменяет требования проекта.
+        body: { "requirements": [ { "skill": 12, "level": 4 }, … ] }
+        """
+        project = self.get_object()
+        items   = request.data.get("requirements", [])
+
+        if not isinstance(items, list):
+            return Response({"detail": "requirements должен быть списком"},
+                            status=status.HTTP_400_BAD_REQUEST)
+
+        incoming = {int(it["skill"]): max(1, min(int(it.get("level", 1)), 5))
+            for it in items
+            if it.get("skill")}
+
+        with transaction.atomic():
+            # a) обновляем / удаляем существующие
+            for link in project.skill_links.select_related("skill"):
+                if link.skill_id in incoming:
+                    new_lvl = incoming.pop(link.skill_id)
+                    if link.level != new_lvl:
+                        link.level = new_lvl
+                        link.save(update_fields=["level"])
+                else:
+                    link.delete()          # в UI нет → убрать
+
+            # b) создаём недостающие
+            ProjectSkill.objects.bulk_create([
+                ProjectSkill(project=project,
+                             skill_id=s_id,
+                             level   =lvl)
+                for s_id, lvl in incoming.items()
+            ])
+
+        return Response({"status": "synced"}, status=status.HTTP_200_OK)
+
+    @action(detail=True, methods=["post"])
+    def match(self, request, pk=None):
+        """
+        Подбирает команду под проект (greedy-score в matching.py),
+        создаёт объект Team и возвращает его в виде
+        { id, project, students: [ {id, name, email, …}, … ], created_at }.
+        """
+        project = self.get_object()
+
+        if not project.skill_links.exists():
+            return Response(
+                {"detail": "У проекта нет требований – подбирать нечего"},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        user_ids = match_team(project)          # <-- algorithm
+
+        if not user_ids:
+            return Response(
+                {"detail": "Ни один студент не подошёл"},
+                status=status.HTTP_200_OK
+            )
+
+        team = Team.objects.create(project=project)
+        team.students.set(user_ids)
+
+        return Response(TeamSerializer(team).data, status=status.HTTP_201_CREATED)
         
     
     @action(detail=False, methods=["post"])
