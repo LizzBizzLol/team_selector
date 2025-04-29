@@ -1,5 +1,6 @@
-import { useParams, Link } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
+import BackButton from "../components/BackButton";
 import api from "../api";
 
 export default function StudentCard() {
@@ -14,9 +15,7 @@ export default function StudentCard() {
 
   return (
     <div className="max-w-xl mx-auto mt-10 p-6 border rounded-xl shadow space-y-4">
-      <Link to="/admin?tab=students" className="text-blue-600 hover:underline">
-        ← Студенты
-      </Link>
+      <BackButton fallback="/admin?tab=students" />
       <h1 className="text-2xl font-semibold">{student.name}</h1>
       <p className="text-gray-500">{student.email}</p>
 

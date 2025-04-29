@@ -24,10 +24,15 @@ class SkillSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 class ProjectSkillSerializer(serializers.ModelSerializer):
+    skill_id   = serializers.IntegerField(source="skill.id", read_only=True)
     skill_name = serializers.CharField(source="skill.name", read_only=True)
+
     class Meta:
-        model = ProjectSkill
-        fields = ("id","skill","skill_name","level")
+        model  = ProjectSkill
+        fields = ("id", "skill_id", "skill_name", "level", "skill")
+        # skill:
+        #   - при GET нам нужен id (skill_id)
+        #   - при POST / PATCH мы всё так же принимаем «skill»
         extra_kwargs = {"skill": {"write_only": True}}
 
 class StudentSkillSerializer(serializers.ModelSerializer):
@@ -56,7 +61,7 @@ class TeamSerializer(serializers.ModelSerializer):
     )   
     class Meta:
         model = Team
-        fields = ("id","project","students","student_ids","score","created_at")
+        fields = ("id","project","students","student_ids","created_at")
         read_only_fields = ("created_at",)
 
 class ProjectSerializer(serializers.ModelSerializer):

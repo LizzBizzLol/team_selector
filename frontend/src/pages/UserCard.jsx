@@ -1,4 +1,5 @@
-import { useParams, Link } from "react-router-dom";
+import { useParams } from "react-router-dom";
+import BackButton from "../components/BackButton";
 import { useEffect, useState } from "react";
 import api from "../api";
 
@@ -14,9 +15,7 @@ export default function UserCard() {
 
   return (
     <div className="max-w-xl mx-auto mt-10 p-6 border rounded-xl shadow space-y-4">
-      <Link to="/admin?tab=curators" className="text-blue-600 hover:underline">
-        ← Кураторы
-      </Link>
+      <BackButton fallback="/admin?tab=curators" />
       
       <h1 className="text-2xl font-semibold">{user.name}</h1>
       <span className="text-xs uppercase tracking-wide text-gray-400">
