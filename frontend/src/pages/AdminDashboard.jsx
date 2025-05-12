@@ -1,5 +1,5 @@
 import { Tab } from "@headlessui/react";
-import { useSearchParams } from "react-router-dom";
+import { useSearchParams, useNavigate } from "react-router-dom";
 import ProjectList   from "../components/ProjectList";
 import CuratorList   from "../components/CuratorList";
 import StudentList   from "../components/StudentList";
@@ -11,12 +11,22 @@ export default function AdminDashboard() {
                       params.get("tab") === "students" ? 2 :
                       params.get("tab") === "skills" ? 3 : 0;
   const tabs = ["Проекты", "Кураторы", "Студенты", "Навыки"];
+  const navigate = useNavigate();
 
   return (
     <div className="max-w-5xl mx-auto p-8">
       <h1 className="text-2xl font-semibold mb-6">Напарники — Администрирование</h1>
 
-      <Tab.Group defaultIndex={defaultIndex}>
+      <Tab.Group
+        defaultIndex={defaultIndex}
+        onChange={(index) => {
+          const q =
+            index === 1 ? "curators" :
+            index === 2 ? "students" :
+            index === 3 ? "skills"   : null;
+          navigate(q ? `/admin?tab=${q}` : "/admin", { replace:true });
+        }}
+      >
         <Tab.List className="flex gap-2 border-b">
           {tabs.map((t) => (
             <Tab key={t} className={({ selected }) =>

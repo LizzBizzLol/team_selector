@@ -1,6 +1,7 @@
+// src/hooks/useSorter.js
 import { useState, useCallback } from "react";
 
-export default function useSorter(defaultKey = "skill_name") {
+export default function useSorter(defaultKey = "name") {
   const [sort, setSort] = useState({ key: defaultKey, dir: "asc" });
 
   const sorted = useCallback(
@@ -10,8 +11,8 @@ export default function useSorter(defaultKey = "skill_name") {
         const v1 = a[sort.key];
         const v2 = b[sort.key];
         return typeof v1 === "number"
-          ? (v1 - v2) * mult
-          : v1.localeCompare(v2) * mult;
+          ? (v1 - v2) * mult            // числовое поле
+          : String(v1).localeCompare(v2) * mult; // строковое
       });
     },
     [sort]
@@ -19,7 +20,9 @@ export default function useSorter(defaultKey = "skill_name") {
 
   const toggle = (key) =>
     setSort((s) =>
-      s.key === key ? { key, dir: s.dir === "asc" ? "desc" : "asc" } : { key, dir: "asc" }
+      s.key === key
+        ? { key, dir: s.dir === "asc" ? "desc" : "asc" }
+        : { key, dir: "asc" }
     );
 
   return { sort, sorted, toggle };

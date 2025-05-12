@@ -8,9 +8,11 @@ from .models import (
 )
 
 class CuratorSerializer(serializers.ModelSerializer):
+    projects_count = serializers.IntegerField(read_only=True)   # ➜ новое поле
+
     class Meta:
-        model = Curator
-        fields = ("id","name","email")
+        model  = Curator
+        fields = ("id", "name", "email", "projects_count")  
 
 class SkillSerializer(serializers.ModelSerializer):
     name = serializers.CharField(
@@ -95,12 +97,6 @@ class ProjectSerializer(serializers.ModelSerializer):
         if not (1 <= min_p <= max_p <= total_students):
             raise serializers.ValidationError(
                 f"Мин. участников ≥1, макс. ≤{total_students}, и min ≤ max"
-            )
-
-        # Проверка: минимум одно требование при редактировании
-        if inst and not inst.skill_links.exists():
-            raise serializers.ValidationError(
-                "Хотя бы одно требование обязательно"
             )
 
         return data

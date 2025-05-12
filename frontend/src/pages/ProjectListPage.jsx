@@ -1,12 +1,13 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import api from "../api";
+import { unwrap } from '../utils/unwrap';
 
 export default function ProjectListPage() {
   const [projects, setProjects] = useState([]);
 
   useEffect(() => {
-    api.get("projects/").then(({ data }) => setProjects(data));
+    api.get("projects/").then(({ data }) => setProjects(unwrap(data)));
   }, []);
   if (!projects.length) {
     return (

@@ -1,13 +1,16 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import SkillCombobox from "../components/SkillCombobox";
 import UserCombobox from "../components/CuratorCombobox";
 import { Link } from "react-router-dom";
 import BackButton from "../components/BackButton"; // именно default-импорт
 import api from "../api";
-import { Dialog } from "@headlessui/react";
 import RequirementsTable from "../components/RequirementsTable";
+import { Dialog } from "@headlessui/react";   // остаётся для Team-диалога
+import Toast from "../components/Toast";
+import humanizeError from "../utils/humanizeError";
+import TeamTable from "../components/TeamTable";
+import { unwrap } from "../utils/unwrap";
 import useUnsavedPrompt from "../hooks/useUnsavedPrompt";
-
 
 /* -------------------------------------------------------------------
    CreateProjectPage – форма создания проекта
@@ -20,19 +23,19 @@ export default function CreateProjectPage() {
   const [maxPart, setMaxPart] = useState(1);
   const [totalStudents, setTotalStudents] = useState(1);
   const [errors, setErrors] = useState({});
-  const [status, setStatus] = useState("");
-  const isDirty =
-  title.trim() !== "" ||
-  curator !== null ||
-  requirements.some(r => r.skill);
+  const [status, setStatus] = useState("");   // сообщение «успех / ошибка»
+  const [sending, setSending] = useState(false); // прогресс
+  const [dirty, setDirty] = useState(false);
+  const fileInputRef = useRef(null);
+  const [toast, setToast] = useState({ show:false, ok:true, text:"" });
 
-useUnsavedPrompt(isDirty);
+useUnsavedPrompt(dirty);  
 
   // Загрузка общего числа студентов
   useEffect(() => {
     api.get("students/")
        .then(({ data }) => {
-         const count = data.length || 1;
+         const count = unwrap(data).length || 1;
          setTotalStudents(count);
          setMaxPart(count);
        })
@@ -45,13 +48,23 @@ useUnsavedPrompt(isDirty);
       if (!file) return;
       try {
         const text = await file.text();
-        const data = JSON.parse(text);
+        let data;
+      try {
+        data = JSON.parse(text);
+      } catch(e) {
+        setToast({show:true, ok:false, text:"Файл не JSON: "+e.message});
+        return;
+      }
+      if (!data.title) {
+        setToast({show:true, ok:false, text:"В файле нет поля «title»"});
+        return;
+      }
   
         // Заголовок
         if (data.title) setTitle(data.title);
   
         // сначала пробуем по ID
-        if (data.curator?.id) {
+        if (data.curator?.id) {                 // curator теперь объект {id,name}
           setCurator({ id: data.curator.id, name: data.curator.name });
         }
         // если ID не задан, ищем в списке кураторов по точному имени (ignore case)
@@ -91,10 +104,13 @@ useUnsavedPrompt(isDirty);
             lvl = Math.max(1, Math.min(5, lvl));
             try {
               const res = await api.get("skills/", { params: { search: item.skill } });
-              const found = res.data.find(
+              const found = unwrap(res.data).find(
                 (s) => s.name.toLowerCase() === item.skill.toLowerCase()
               );
-              if (found) reqsArr.push({ skill: found, level: lvl });
+              if (found) {
+// skill ОБЯЗАТЕЛЬНО объект {id,name}
+                reqsArr.push({ skill: {id: found.id, name: found.name}, level: lvl });
+                }
             } catch {
               // пропускаем при ошибке
             }
@@ -118,16 +134,20 @@ useUnsavedPrompt(isDirty);
       const arr = [...requirements];
       arr[idx][field] = val;
       setRequirements(arr);
+      setDirty(true);
     };
   
-    const removeRequirement = (idx) =>
+    const removeRequirement = (idx) => {
       setRequirements((reqs) => reqs.filter((_, i) => i !== idx));
+      setDirty(true);
+    };
   
     // Отправка формы создания проекта
     const handleSubmit = async (e) => {
       e.preventDefault();
       setErrors({});
-      setStatus("Отправка…");
+      setStatus("");
+      setSending(true);
   
       let projectId = null;
       try {
@@ -152,7 +172,10 @@ useUnsavedPrompt(isDirty);
             )
         );
   
-        setStatus("✅ Проект создан");
+        setToast({ show:true, ok:true, text:`Проект «${title}» создан` });
+        setSending(false);
+        fileInputRef.current.value = "";    // очистили выбор файла
+        setDirty(false);
         // сброс формы
         setTitle("");
         setCurator(null);
@@ -160,32 +183,26 @@ useUnsavedPrompt(isDirty);
         setMinPart(1);
         setMaxPart(totalStudents);
       } catch (err) {
-        // при ошибке удаления созданного проекта не требуется, т.к. JSON-импорт убран
-        console.error("CreateProject error:", err);
-        if (err.response?.data) {
-          setErrors(err.response.data);
-          setStatus("Ошибка: " + JSON.stringify(err.response.data));
-        } else {
-          setStatus("Ошибка при создании проекта: " + err.message);
-        }
+        setSending(false);
+        setToast({ show:true, ok:false, text:humanizeError(err) });   
       }
-    };
+    };  
 
   /* JSX */
   return (
-    <div
-      className="max-w-2xl mx-auto mt-10 p-8 border border-gray-300 rounded-xl shadow space-y-8"
-    >
-      <h1 className="text-2xl font-semibold text-center">Создание проекта</h1>
-
-      <form onSubmit={handleSubmit} className="space-y-6">
+    <main className="flex justify-center pt-12 pb-14 bg-gray-50 min-h-screen overflow-auto">
+    <form onSubmit={handleSubmit}
+  className="w-full max-w-lg sm:max-w-2xl px-6 py-8 mx-auto space-y-6 border rounded-xl shadow bg-white text-xs sm:text-sm md:text-base">
+        <h1 className="text-2xl font-semibold text-center mb-6 sticky top-0 bg-white/80 backdrop-blur">
+        Создание проекта
+      </h1>
         {/* название */}
         <div>
           <label className="block font-medium">Название проекта</label>
           <input
             className="border w-full px-3 py-2 rounded-lg focus:ring-2 focus:ring-blue-500"
             value={title}
-            onChange={(e) => setTitle(e.target.value)}
+            onChange={(e) => { setTitle(e.target.value); setDirty(true); }}
             required
           />
           {errors.title && <p className="text-red-500 text-sm">{errors.title[0]}</p>}
@@ -194,7 +211,7 @@ useUnsavedPrompt(isDirty);
         {/* куратор */}
         <div>
           <label className="block mb-1 font-medium">Куратор</label>
-          <UserCombobox value={curator} onChange={setCurator} />
+          <UserCombobox value={curator} onChange={setCurator} onDirty={setDirty} />
           {errors.curator && <p className="text-red-500 text-sm">{errors.curator[0]}</p>}
         </div>
 
@@ -212,7 +229,7 @@ useUnsavedPrompt(isDirty);
                 let v = Number(e.target.value);
                 v = Math.max(1, Math.min(totalStudents, v));
                 setMinPart(v);
-                if (v > maxPart) setMaxPart(v);
+                if (v > maxPart) setMaxPart(v); setDirty(true);
               }}
               required
             />
@@ -232,7 +249,7 @@ useUnsavedPrompt(isDirty);
                 let v = Number(e.target.value);
                 v = Math.max(1, Math.min(totalStudents, v));
                 setMaxPart(v);
-                if (v < minPart) setMinPart(v);
+                if (v < minPart) setMinPart(v); setDirty(true);
               }}
               required
             />
@@ -249,7 +266,10 @@ useUnsavedPrompt(isDirty);
             <div key={idx} className="flex gap-2 mb-2 items-center">
               <SkillCombobox
                 value={r.skill}
-                onChange={(val) => updateRequirement(idx, "skill", val)}
+                onChange={(val) => {
+                  updateRequirement(idx, "skill", val);
+                  setDirty(true);
+                }}
               />
               <input
                 type="number"
@@ -280,7 +300,10 @@ useUnsavedPrompt(isDirty);
 
           <button
             type="button"
-            onClick={addRequirement}
+            onClick={() => {
+              addRequirement();
+              setDirty(true);
+            }}
             className="mt-1 px-3 py-1 border border-blue-600 text-blue-600 rounded hover:bg-blue-50"
           >
             + Добавить
@@ -290,11 +313,10 @@ useUnsavedPrompt(isDirty);
         {/* JSON-файл */}
         <div>
           <label className="block mb-1 font-medium">JSON-файл с данными о проекте</label>
-          <input type="file" accept=".json" onChange={handleFileUpload} />
+          <input ref={fileInputRef} type="file" accept=".json" onChange={handleFileUpload} />
         </div>
-
         <button className="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700">
-          Создать проект
+          {sending ? "Отправка…" : "Создать проект"}
         </button>
         {status && (
           <p className={`text-sm mt-2 ${
@@ -304,7 +326,8 @@ useUnsavedPrompt(isDirty);
           </p>
         )}
       </form>
-    </div>
+      <Toast show={toast.show} ok={toast.ok} text={toast.text} onClose={() => setToast(t => ({ ...t, show:false }))} />
+    </main>
   );
 };
 
@@ -322,13 +345,14 @@ export const ProjectCard = ({ projectId }) => {
   const [team, setTeam] = useState(null);       // успешный подбор
   const [matchErr, setMatchErr] = useState(""); // текст ошибки
   const [matching, setMatching] = useState(false);
-  const isDirty =
-  title.trim() !== "" ||
-  curator !== null ||
-  reqs.some(r => r.skill);
+  const [setToast] = useState({ show:false, ok:true, text:"" });
+  const [dirty, setDirty] = useState(false);
+  const canSave =
+  edit &&               // мы в режиме редактирования 
+  dirty &&              // есть изменения
+  reqs.some(r => r.skill && r.skill.id);   // хотя бы 1 валидный навык
 
-useUnsavedPrompt(isDirty);  
-
+useUnsavedPrompt(dirty);
 
   /* загрузка проекта + требований */
   const fetchData = async () => {
@@ -337,13 +361,13 @@ useUnsavedPrompt(isDirty);
     setProject(data);
     // Заголовок
     setTitle(data.title);
+    setDirty(true);
     // Требования из skill_links
   setReqs(
     (data.skill_links || []).map(x => ({
-      id:         x.id, 
-      skill:      x.skill,
-      skill_name: x.skill_name,
-      level:      x.level,
+      id:    x.id,
+      skill: { id: x.skill, name: x.skill_name },   // объект для Combobox
+      level: x.level,
     }))
   );
   // Куратор — из вложенного объекта data.curator
@@ -351,6 +375,7 @@ useUnsavedPrompt(isDirty);
     setCurator({ id: data.curator.id, name: data.curator.name });
   } else {
     setCurator(null);
+    setDirty(true);
   }
   };
   useEffect(() => {
@@ -366,23 +391,27 @@ useUnsavedPrompt(isDirty);
           title,
           curator_id: curator?.id ?? null,
         });
-    
-        /* 2 — приводим reqs в «чистый» вид и отправляем одним PUT */
-        const cleaned = reqs.filter(r => Number.isInteger(r.skill));
-        setReqs(cleaned);                     // локальная синхронизация
-    
-        await api.put(`projects/${projectId}/sync_requirements/`, {
-          requirements: cleaned.map(r => ({
-            skill: r.skill,
-            level: r.level,
-          })),
-        });
+  /* 2 — валидация: хотя бы один полный элемент */
+        const cleaned = reqs.filter(r => r.skill && r.skill.id)
+                     .map(r => ({ skill: r.skill.id, level: +r.level }));
+        if (!cleaned.length) {
+          setToast({ show:true, ok:false, text:"Добавьте хотя бы один навык" });  
+          return;
+        }
+        setDirty(true);
+
+        await api.put(`projects/${projectId}/sync_requirements/`,
+          { requirements: cleaned });
+          setDirty(false);          //  ✨
+          setEdit(false);
+          fetchData();
     
         /* 3 — финал */
+        fetchData();
         setStatus("✔️ Сохранено");
         setEdit(false);
         setErrors({});
-        fetchData();
+        setDirty(false);
       } catch (err) {
         const msg =
           err.response?.data?.detail ||
@@ -401,9 +430,12 @@ useUnsavedPrompt(isDirty);
     <div className="max-w-3xl mx-auto mt-12 p-8 border border-gray-300 rounded-xl shadow space-y-6">
       <div className="flex justify-between items-center mb-4">
       <BackButton fallback="/projects" />
-        <button
-          onClick={() => (edit ? save() : setEdit(true))}
-          className="px-3 py-1 border border-blue-600 text-blue-600 rounded hover:bg-blue-50"
+      
+      <button
+        onClick={() => (edit ? save() : setEdit(true))}
+        className="px-3 py-1 border border-blue-600 text-blue-600 rounded
+              hover:bg-blue-50 disabled:opacity-40"
+              disabled={!canSave}
         >
           {edit ? "Сохранить" : "Редактировать"}
         </button>
@@ -428,6 +460,7 @@ useUnsavedPrompt(isDirty);
         <button
           onClick={() => {
             if (!window.confirm("Удалить проект?")) return;
+            setDirty(false);                // убираем диалог «изменения не сохранены»
             api.delete(`projects/${projectId}/`);
             window.location.href = "/projects";
           }}
@@ -442,7 +475,7 @@ useUnsavedPrompt(isDirty);
         <input
           className="border w-full px-3 py-2 rounded-lg focus:ring-2 focus:ring-blue-500"
           value={title}
-          onChange={(e) => setTitle(e.target.value)}
+          onChange={(e) => { setTitle(e.target.value); setDirty(true); }}
         />
       ) : (
         <h2 className="text-2xl font-semibold">{project.title}</h2>
@@ -452,7 +485,7 @@ useUnsavedPrompt(isDirty);
       <div>
         <label className="block mb-1 font-medium">Куратор</label>
         {edit ? (
-          <UserCombobox value={curator} onChange={setCurator} />
+          <UserCombobox value={curator} onChange={setCurator} onDirty={setDirty} />
         ) : (
           <Link to={`/user/${project.curator.id}`} className="text-blue-600 hover:underline">
           {project.curator_name || "—"}
@@ -468,13 +501,14 @@ useUnsavedPrompt(isDirty);
             {reqs.map((r, i) => (
               <div key={`${r.skill ?? 'new'}-${i}`} className="flex gap-2 mb-2 items-center">
                 <SkillCombobox
-                  value={{ id: r.skill, name: r.skill_name }}
+                  value={r.skill}
                   onChange={(val) => {
                     // val может быть null, если поле очищено
                     if (!val) return;
                     const upd = [...reqs];
-                    upd[i] = { ...upd[i], skill: val.id, skill_name: val.name };
+                    upd[i] = { ...upd[i], skill: val };   // сохраняем объект
                     setReqs(upd);
+                    setDirty(true);
                   }}
                 />
                 <input
@@ -487,23 +521,15 @@ useUnsavedPrompt(isDirty);
                     const upd = [...reqs];
                     upd[i].level = e.target.value;
                     setReqs(upd);
+                    setDirty(true);
                   }}
                 />
                 <button
                   type="button"
                   disabled={reqs.length === 1}
                   onClick={() => {
-                    const payload =
-                      r.id ? { ps_id: r.id }           // у строки есть первичный ключ
-                      : r.skill ? { skill_id: r.skill }  // или хотя бы id навыка
-                      : null;                            // новая пустая – в БД её ещё нет
-                    
-                    if (payload) {
-                      api.post(`projects/${projectId}/remove_requirement/`, payload)
-                          .catch(console.error);
-                    }
-                    /* локально убираем строку из state */
                     setReqs(prev => prev.filter((_, idx) => idx !== i));
+                    setDirty(true);
                   }}
                   className={`px-2 ${reqs.length === 1 ? "opacity-30" : "text-red-500"}`}
                 >
@@ -513,9 +539,10 @@ useUnsavedPrompt(isDirty);
             ))}
             <button
               type="button"
-              onClick={() =>
-                setReqs([...reqs, { skill: null, skill_name: "", level: 1 }])
-              }
+              onClick={() => {
+                setReqs([...reqs, { skill: null, skill_name: "", level: 1 }]);
+                setDirty(true);
+              }}
               className="mt-1 px-3 py-1 border border-blue-600 text-blue-600 rounded hover:bg-blue-50"
             >
               + Добавить требование
@@ -525,6 +552,14 @@ useUnsavedPrompt(isDirty);
           <RequirementsTable reqs={reqs} />
         )}
       </div>
+      {/* Команды */}
+      {!edit && (
+        <section>
+          <h3 className="font-medium mb-2">Команды</h3>
+          <TeamTable projectId={projectId} />
+        </section>
+      )}
+
 
       {/* Сообщения об ошибке */}
       {/* сначала статус, потом детали */}

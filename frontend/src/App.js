@@ -36,7 +36,7 @@ export default function App() {
   return (
     <BrowserRouter>
       {/* ==== фикс‑шапка ==== */}
-      <header className="sticky top-0 bg-white/80 backdrop-blur border-b shadow-sm">
+      <header className="sticky top-0 z-50 bg-white/80 backdrop-blur border-b shadow-sm">
         <div className="max-w-5xl mx-auto flex items-center gap-4 px-6 py-3">
           {/* «логотип» — ведёт на /create */}
           <NavItem to="/create" className="mr-auto">

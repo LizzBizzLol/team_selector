@@ -2,13 +2,14 @@ import { useParams } from "react-router-dom";
 import BackButton from "../components/BackButton";
 import { useEffect, useState } from "react";
 import api from "../api";
+import { unwrap } from '../utils/unwrap';
 
 export default function UserCard() {
   const { id } = useParams();
   const [user, setUser] = useState(null);
 
   useEffect(() => {
-    api.get(`curators/${id}/`).then(({ data }) => setUser(data));
+    api.get(`curators/${id}/`).then(({ data }) => setUser(unwrap(data)));
   }, [id]);
 
   if (!user) return <p className="mt-8 text-center">Загрузка…</p>;

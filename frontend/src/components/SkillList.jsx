@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import api from '../api';
-
+import { unwrap } from '../utils/unwrap';
 export default function SkillList() {
   const [skills, setSkills] = useState([]);
 
   useEffect(() => {
     api.get('skills/')
-      .then(({ data }) => setSkills(data))
+      .then(({ data }) => setSkills(unwrap(data)))
       .catch(console.error);
   }, []);
 
