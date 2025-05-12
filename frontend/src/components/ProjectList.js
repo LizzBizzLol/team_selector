@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from "react";
 import api from "../api";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
+import { unwrap } from '../utils/unwrap';
 
 export default function ProjectList() {
   const [projects, setProjects] = useState([]);
-
+  const location = useLocation();
   useEffect(() => {
     api.get("projects/")
-      .then(({ data }) => setProjects(data))
+      .then(({ data }) => setProjects(unwrap(data)))
       .catch((err) => console.error(err));
   }, []);
   if (!projects.length) {
@@ -16,6 +17,7 @@ export default function ProjectList() {
         <p className="mb-4 text-gray-600">Пока нет ни одного проекта.</p>
         <Link
           to="/create"
+          state={{ from: location.pathname + location.search }}
           className="inline-block bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
         >
           Создать проект
@@ -43,6 +45,7 @@ export default function ProjectList() {
               <td className="px-4 py-2">
                 <Link
                   to={`/project/${p.id}`}
+                  state={{ from: location.pathname + location.search }}
                   className="text-blue-600 hover:underline"
                 >
                   {p.title}
@@ -52,7 +55,9 @@ export default function ProjectList() {
               {/* ─ куратор → карточка пользователя ─ */}
               <td className="px-4 py-2">
                 {p.curator ? (
-                  <Link to={`/user/${p.curator.id}`} className="text-blue-600 hover:underline">
+                  <Link to={`/user/${p.curator.id}`}
+                    state={{ from: location.pathname + location.search }}
+                    className="text-blue-600 hover:underline">
                     {p.curator.name}
                   </Link>
                 ) : "—"}

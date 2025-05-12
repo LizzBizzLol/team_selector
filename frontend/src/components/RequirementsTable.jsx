@@ -26,7 +26,7 @@ export default function RequirementsTable({ reqs }) {
       <tbody>
         {sorted(reqs).map((r) => (
           <tr key={r.skill} className="border-t">
-            <td className="px-3 py-1">{r.skill_name}</td>
+            <td className="px-3 py-1">{r.skill?.name ?? r.skill_name ?? "—"} </td>
             <td className="px-3 py-1">{r.level}</td>
           </tr>
         ))}

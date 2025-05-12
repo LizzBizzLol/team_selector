@@ -2,13 +2,13 @@ import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import BackButton from "../components/BackButton";
 import api from "../api";
-
+import { unwrap } from '../utils/unwrap';
 export default function StudentCard() {
   const { id } = useParams();
   const [student, setStudent] = useState(null);
 
   useEffect(() => {
-    api.get(`students/${id}/`).then(({ data }) => setStudent(data));
+    api.get(`students/${id}/`).then(({ data }) => setStudent(unwrap(data)));
   }, [id]);
 
   if (!student) return <p className="text-center mt-8">Загрузка…</p>;

@@ -1,20 +1,26 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Combobox } from "@headlessui/react";
 import { CheckIcon, ChevronUpDownIcon } from "@heroicons/react/20/solid";
 import api from '../api';
+import { unwrap } from '../utils/unwrap';
+
 
 export default function SkillCombobox({ value, onChange }) {
   const [query, setQuery] = useState("");
   const [skills, setSkills] = useState([]);
+  const [dropUp, setDropUp] = useState(false);
+  const inputRef = useRef(null);
 
   // подгружаем варианты
   useEffect(() => {
     const load = async () => {
       const { data } = await api.get("skills/", { params: { search: query } });
-      // сортируем по алфавиту
-      data.sort((a, b) => a.name.localeCompare(b.name));
-      setSkills(data);
-    };
+      // если включена пагинация → берём data.results
+      const list = unwrap(data);
+      // сортировка только если это действительно массив объектов
+      list.sort((a, b) => a.name.localeCompare(b.name));
+      setSkills(list);
+    }; 
     const t = setTimeout(load, 300);      // debounce 300 мс
     return () => clearTimeout(t);
   }, [query]);
@@ -23,9 +29,18 @@ export default function SkillCombobox({ value, onChange }) {
     <Combobox value={value} onChange={onChange}>
       <div className="relative">
         <Combobox.Input
+          ref={inputRef}
           className="border w-full px-3 py-2 rounded-lg focus:ring-2 focus:ring-blue-500"
           displayValue={(v) => v?.name || ""}
           onChange={(e) => setQuery(e.target.value)}
+          onFocus={() => {
+            // ─ вычисляем, хватит ли места снизу
+            const rect = inputRef.current?.getBoundingClientRect();
+            if (rect) {
+              const spaceBelow = window.innerHeight - rect.bottom;
+              setDropUp(spaceBelow < 200);  // 200 px ≈ 4-5 пунктов
+            }
+          }}
           placeholder="Навык"
         />
         <Combobox.Button className="absolute inset-y-0 right-0 flex items-center pr-3">
@@ -33,7 +48,14 @@ export default function SkillCombobox({ value, onChange }) {
         </Combobox.Button>
 
         {skills.length > 0 && (
-          <Combobox.Options className="absolute z-10 mt-1 max-h-56 w-full overflow-auto rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black/5">
+          <Combobox.Options
+            className={`
+              absolute z-10 w-full
+              ${dropUp ? "bottom-full mb-1" : "mt-1"}
+              max-h-48 overflow-y-auto
+              rounded-md bg-white py-1 text-base shadow-lg ring-1 ring-black/5
+            `}
+          >
             {skills.map((s) => (
               <Combobox.Option
                 key={s.id}

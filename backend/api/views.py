@@ -2,7 +2,7 @@ from rest_framework import viewsets, status
 from rest_framework.permissions import AllowAny
 from rest_framework.decorators import action
 from rest_framework.response import Response
-from django.db.models import Q
+from django.db.models import Q, Count
 from django.db import transaction
 
 
@@ -28,21 +28,21 @@ from .matching import match_team
 
 
 class CuratorViewSet(viewsets.ModelViewSet):
-    """
-    CRUD для кураторов.
-    Поиск по имени или email без учёта регистра.
-    """
     queryset = Curator.objects.all()
     serializer_class = CuratorSerializer
 
     def get_queryset(self):
         qs = super().get_queryset()
+
+        # ▸ добавляем projects_count
+        qs = qs.annotate(projects_count=Count("curated_projects"))
+
+        # ▸ поиск (как было)
         search = self.request.query_params.get("search")
         if search:
-            qs = qs.filter(
-                Q(name__icontains=search) |
-                Q(email__icontains=search)
-            )
+            qs = qs.filter(Q(name__icontains=search) |
+                           Q(email__icontains=search))
+
         return qs.order_by("name")
 
 class StudentViewSet(viewsets.ModelViewSet):
@@ -91,8 +91,17 @@ class TeamViewSet(viewsets.ModelViewSet):
     """
     CRUD для команд, полученных через match.
     """
-    queryset = Team.objects.all()
+    queryset = Team.objects.all().prefetch_related("students", "project")
     serializer_class = TeamSerializer
+    def get_queryset(self):
+        qs = super().get_queryset()
+        proj_id = self.request.query_params.get("project")
+        if proj_id:
+            qs = qs.filter(project_id=proj_id)
+        ordering = self.request.query_params.get("ordering")
+        if ordering == "-created_at":
+            qs = qs.order_by("-created_at")
+        return qs
 
 
 class ProjectViewSet(viewsets.ModelViewSet):
@@ -201,6 +210,18 @@ class ProjectViewSet(viewsets.ModelViewSet):
                              level   =lvl)
                 for s_id, lvl in incoming.items()
             ])
+            # ► итоговая проверка: нельзя оставить проект без требований
+            if not project.skill_links.exists():
+                return Response(
+                    {"detail": "Хотя бы одно требование обязательно"},
+                    status=status.HTTP_400_BAD_REQUEST
+                )
+            
+            if not items:
+                return Response(
+                    {"detail": "Нужно хотя бы одно требование"},
+                    status=status.HTTP_400_BAD_REQUEST
+                )
 
         return Response({"status": "synced"}, status=status.HTTP_200_OK)
 
@@ -227,6 +248,21 @@ class ProjectViewSet(viewsets.ModelViewSet):
                 status=status.HTTP_200_OK
             )
 
+        # ──────────────────────────────────────────────────────────────
+        # 1. проверяем, есть ли уже команда с тем же составом
+        # ──────────────────────────────────────────────────────────────
+        same_size = Team.objects.filter(project=project
+                       ).annotate(n=Count("students")
+                       ).filter(n=len(user_ids))
+
+        for t in same_size.prefetch_related("students"):
+            if set(t.students.values_list("id", flat=True)) == set(user_ids):
+                # нашли дубликат → возвращаем существующую
+                return Response(TeamSerializer(t).data, status=status.HTTP_200_OK)
+
+        # ──────────────────────────────────────────────────────────────
+        # 2. иначе создаём новую
+        # ──────────────────────────────────────────────────────────────
         team = Team.objects.create(project=project)
         team.students.set(user_ids)
 
