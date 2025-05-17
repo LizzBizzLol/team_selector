@@ -55,16 +55,74 @@ class StudentSerializer(serializers.ModelSerializer):
         model = Student
         fields = ("id", "name", "email", "skills")
 
+class TeamStudentSkillDetailSerializer(serializers.Serializer):
+    skill_id = serializers.IntegerField()
+    skill_name = serializers.CharField()
+    student_level = serializers.FloatField()
+    required_level = serializers.FloatField()
+    score = serializers.FloatField()
+
+class TeamStudentDetailSerializer(serializers.ModelSerializer):
+    score = serializers.SerializerMethodField()
+    skills = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Student
+        fields = ("id", "name", "email", "score", "skills")
+
+    def get_score(self, student):
+        project = self.context.get("project")
+        if not project:
+            return None
+        requirements = project.skill_links.all()
+        sum_score = 0
+        for req in requirements:
+            try:
+                lvl = StudentSkill.objects.get(student=student, skill=req.skill).level
+            except StudentSkill.DoesNotExist:
+                lvl = 0
+            if req.level:
+                sum_score += min(lvl / req.level, 1)
+        if requirements.count() == 0:
+            return 0
+        return round(sum_score / requirements.count(), 2)
+
+    def get_skills(self, student):
+        project = self.context.get("project")
+        if not project:
+            return []
+        requirements = project.skill_links.all()
+        out = []
+        for req in requirements:
+            try:
+                lvl = StudentSkill.objects.get(student=student, skill=req.skill).level
+            except StudentSkill.DoesNotExist:
+                lvl = 0
+            score = min(lvl / req.level, 1) if req.level else 0
+            out.append({
+                "skill_id": req.skill.id,
+                "skill_name": req.skill.name,
+                "student_level": lvl,
+                "required_level": req.level,
+                "score": round(score, 2),
+            })
+        return out
+
 class TeamSerializer(serializers.ModelSerializer):
     students = StudentSerializer(many=True, read_only=True)
-    student_ids = serializers.PrimaryKeyRelatedField(
-                    many=True, write_only=True, source="students",
-                    queryset=Student.objects.all()
-    )   
+
     class Meta:
         model = Team
-        fields = ("id","project","students","student_ids","created_at")
-        read_only_fields = ("created_at",)
+        fields = ("id", "project", "students", "created_at")
+
+    def get_students(self, obj):
+        # Передаём в сериализатор контекст с проектом, чтобы он видел требования
+        project = obj.project
+        return TeamStudentDetailSerializer(
+            obj.students.all(),
+            many=True,
+            context={"project": project}
+        ).data
 
 class ProjectSerializer(serializers.ModelSerializer):
     curator       = CuratorSerializer(read_only=True)

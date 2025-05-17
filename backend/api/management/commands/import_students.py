@@ -1,26 +1,29 @@
-# api/management/commands/import_students.py
-import csv, json
+import json
 from django.core.management.base import BaseCommand
-from api.models import Student, Skill, StudentSkill
+from api.models import Student
+from pathlib import Path
 
 class Command(BaseCommand):
-    help = "Импорт студентов из CSV. Формат: name,email,skills_json"
+    help = "Импорт студентов из students_db.json"
 
-    def add_arguments(self, parser):
-        parser.add_argument("file", help="CSV-файл")
+    def handle(self, *args, **options):
+        path = Path("/Users/Admin/Desktop/team_selector/students_db.json")  # путь к твоему json
+        if not path.exists():
+            self.stderr.write(self.style.ERROR(f"Файл не найден: {path}"))
+            return
 
-    def handle(self, *args, file, **kw):
-        with open(file, newline='', encoding='utf-8') as f:
-            for row in csv.DictReader(f):
-                stu, _ = Student.objects.get_or_create(
-                    name=row["name"].strip(),
-                    email=row["email"].strip()
-                )
-                skills = json.loads(row["skills"])
-                for sk in skills:                      # [{"name":"Python","level":3}, …]
-                    skill, _ = Skill.objects.get_or_create(name=sk["name"].strip())
-                    StudentSkill.objects.update_or_create(
-                        student=stu, skill=skill,
-                        defaults={"level": sk.get("level", 1)}
-                    )
-        self.stdout.write(self.style.SUCCESS("Импорт завершён"))
+        students = json.loads(path.read_text(encoding="utf-8"))
+        count_new, count_old = 0, 0
+        for s in students:
+            obj, created = Student.objects.get_or_create(
+                name=s['fio'],
+                defaults={"email": s['email']}
+            )
+            if not created:
+                count_old += 1
+            else:
+                count_new += 1
+
+        self.stdout.write(self.style.SUCCESS(
+            f"Импортировано новых студентов: {count_new}, уже существовали: {count_old}"
+        ))

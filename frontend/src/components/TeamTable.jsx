@@ -2,6 +2,7 @@
 import { useEffect, useState } from "react";
 import api from "../api";
 import { unwrap } from '../utils/unwrap';
+import { Link } from "react-router-dom";
 
 const PAGE = 5;          // строк на страницу
 
@@ -58,14 +59,21 @@ export default function TeamTable({ projectId }) {
                 <ul className="list-disc pl-5">
                   {t.students.map(s => <li key={s.id}>{s.name}</li>)}
                 </ul>
+                {/* Кнопка-ссылка "Смотреть" */}
+                  <Link
+                    to={`/team/${t.id}`}
+                    className="inline-block px-2 text-blue-600 underline text-xs"
+                  >
+                    Смотреть
+                  </Link>
               </td>
               <td className="px-3 py-1">
                 <button onClick={() => remove(t.id)}
-                        className="text-red-500 text-lg leading-none">✖</button>
-              </td>
-            </tr>
-          ))}
-        </tbody>
+                className="text-red-500 text-lg leading-none">✖</button>
+      </td>
+    </tr>
+  ))}
+</tbody>
       </table>
 
       {/* пагинация */}
