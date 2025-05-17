@@ -4,7 +4,10 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 from django.db.models import Q, Count
 from django.db import transaction
+from rest_framework.pagination import PageNumberPagination
 
+class NoPagination(PageNumberPagination):
+    page_size = None        # отключаем limit/offset
 
 from .models import (
     Curator,
@@ -30,21 +33,15 @@ from .matching import match_team
 class CuratorViewSet(viewsets.ModelViewSet):
     queryset = Curator.objects.all()
     serializer_class = CuratorSerializer
+    pagination_class = NoPagination   # ✨
 
     def get_queryset(self):
-        qs = super().get_queryset()
-
-        # ▸ добавляем projects_count
-        qs = qs.annotate(projects_count=Count("curated_projects"))
-
-        # ▸ поиск (как было)
+        qs = super().get_queryset().annotate(projects_count=Count("curated_projects"))
         search = self.request.query_params.get("search")
         if search:
-            qs = qs.filter(Q(name__icontains=search) |
-                           Q(email__icontains=search))
-
+            qs = qs.filter(Q(name__icontains=search) | Q(email__icontains=search))
         return qs.order_by("name")
-
+    
 class StudentViewSet(viewsets.ModelViewSet):
     """
     CRUD для студентов.
@@ -91,7 +88,9 @@ class TeamViewSet(viewsets.ModelViewSet):
     """
     CRUD для команд, полученных через match.
     """
-    queryset = Team.objects.all().prefetch_related("students", "project")
+    queryset = Team.objects.all().prefetch_related(
+        "students__skills__skill", "project"
+    )
     serializer_class = TeamSerializer
     def get_queryset(self):
         qs = super().get_queryset()
