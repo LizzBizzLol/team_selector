@@ -16,6 +16,10 @@ class Student(models.Model):
     name = models.CharField(max_length=100, unique=True)
     email = models.EmailField(unique=True)
     created_at = models.DateTimeField(auto_now_add=True)
+    admission_year = models.PositiveSmallIntegerField(
+        null=True, blank=True,
+        verbose_name="Год поступления"
+    )
 
     def __str__(self):
         return self.name
@@ -87,7 +91,10 @@ class StudentSkill(models.Model):
         on_delete=models.CASCADE
     )
     level = models.FloatField()  # например: 0.6, 1.0
-
+    year = models.PositiveSmallIntegerField(
+        null=True, blank=True,
+        verbose_name="Год"
+    )
     class Meta:
         unique_together = ("student", "skill")
 

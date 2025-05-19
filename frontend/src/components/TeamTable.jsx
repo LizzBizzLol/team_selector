@@ -17,7 +17,7 @@ export default function TeamTable({ projectId }) {
     const { data } = await api.get("teams/", {
       params: {
         project:  projectId,
-        ordering: "-created_at",
+        ordering: "created_at",
         limit:    PAGE,
         offset:   newOffset
       }
@@ -52,24 +52,26 @@ export default function TeamTable({ projectId }) {
           </tr>
         </thead>
         <tbody>
-          {teams.map(t => (
-            <tr key={t.id} className="border-t align-top">
-              <td className="px-3 py-1 whitespace-nowrap">{t.id}</td>
-              <td className="px-3 py-1">
-                <ul className="list-disc pl-5">
-                  {t.students.map(s => <li key={s.id}>{s.name}</li>)}
-                </ul>
-                {/* Кнопка-ссылка "Смотреть" */}
-                  <Link
-                    to={`/team/${t.id}`}
-                    className="inline-block px-2 text-blue-600 underline text-xs"
-                  >
-                    Смотреть
-                  </Link>
-              </td>
-              <td className="px-3 py-1">
-                <button onClick={() => remove(t.id)}
-                className="text-red-500 text-lg leading-none">✖</button>
+  {teams.map((t, idx) => (
+    <tr key={t.id} className="border-t align-top">
+      <td className="px-3 py-1 whitespace-nowrap">
+        {offset + idx + 1} {/* ← локальный номер */}
+      </td>
+      <td className="px-3 py-1">
+        <ul className="list-disc pl-5">
+          {t.students.map(s => <li key={s.id}>{s.name}</li>)}
+        </ul>
+        {/* Кнопка-ссылка "Смотреть" */}
+        <Link
+          to={`/team/${t.id}`}
+          className="inline-block px-2 text-blue-600 underline text-xs"
+        >
+          Смотреть
+        </Link>
+      </td>
+      <td className="px-3 py-1">
+        <button onClick={() => remove(t.id)}
+          className="text-red-500 text-lg leading-none">✖</button>
       </td>
     </tr>
   ))}

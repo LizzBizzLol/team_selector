@@ -10,6 +10,7 @@ export default function TeamPage() {
   const [team, setTeam] = useState(null);
   const [project, setProject] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [teams, setTeams] = useState([]); // ← добавили список команд для номера
 
   useEffect(() => {
     // Получаем команду
@@ -21,19 +22,42 @@ export default function TeamPage() {
       })
       .then(({ data }) => {
         setProject(data);
+        // Получаем все команды по этому проекту
+        return api.get("teams/", { params: { project: data.id, ordering: "created_at" } });
+      })
+      .then(({ data }) => {
+        setTeams(unwrap(data));
       })
       .finally(() => setLoading(false));
   }, [id]);
 
   if (loading) return <p className="mt-8 text-center">Загрузка…</p>;
   if (!team) return <p className="mt-8 text-center text-red-500">Команда не найдена</p>;
+  // Находим локальный номер этой команды
+  const localNum = teams.findIndex(t => t.id === team.id) + 1;
 
   return (
     <main className="max-w-4xl mx-auto pb-10"> {/* pb-10 = padding-bottom */}
     <div className="max-w-4xl mx-auto mt-10 p-6 border rounded-xl shadow space-y-4 bg-white">
-      <BackButton fallback="/projects" />
+    <BackButton fallback="/projects" />
+    <button
+      className="ml-4 px-3 py-1 border border-red-600 text-red-600 rounded hover:bg-red-50"
+      onClick={async () => {
+        if (!window.confirm("Удалить эту команду? Это действие необратимо.")) return;
+        try {
+          await api.delete(`teams/${team.id}/`);
+          // После удаления — редирект обратно
+          window.location.href = `/project/${project.id}`; // или куда тебе нужно
+        } catch (e) {
+          alert("Ошибка удаления: " + (e?.response?.data?.detail || e.message));
+        }
+      }}
+    >
+      Удалить команду
+    </button>
+    
       <h1 className="text-2xl font-semibold mb-2">
-        Команда #{team.id}
+        Команда №{localNum > 0 ? localNum : team.id}
       </h1>
       {project && (
         <div>

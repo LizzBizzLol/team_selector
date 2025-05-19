@@ -7,13 +7,6 @@ from .models import (
     StudentSkill, Team
 )
 
-class CuratorSerializer(serializers.ModelSerializer):
-    projects_count = serializers.IntegerField(read_only=True)   # ➜ новое поле
-
-    class Meta:
-        model  = Curator
-        fields = ("id", "name", "email", "projects_count")  
-
 class SkillSerializer(serializers.ModelSerializer):
     name = serializers.CharField(
         validators=[UniqueValidator(
@@ -36,6 +29,21 @@ class ProjectSkillSerializer(serializers.ModelSerializer):
         #   - при GET нам нужен id (skill_id)
         #   - при POST / PATCH мы всё так же принимаем «skill»
         extra_kwargs = {"skill": {"write_only": True}}
+
+class ProjectListSerializer(serializers.ModelSerializer):
+    # Для таблицы можно сделать только нужные поля
+    requirements = ProjectSkillSerializer(many=True, read_only=True, source='skill_links')
+    class Meta:
+        model = Project
+        fields = ("id", "title", "min_participants", "max_participants", "requirements")
+
+class CuratorSerializer(serializers.ModelSerializer):
+    projects_count = serializers.IntegerField(read_only=True)
+    projects = ProjectListSerializer(many=True, read_only=True, source="curated_projects")  # ← ВАЖНО: проверь related_name
+
+    class Meta:
+        model = Curator
+        fields = ("id", "name", "email", "projects_count", "projects")
 
 class StudentSkillSerializer(serializers.ModelSerializer):
     skill_name = serializers.CharField(source="skill.name", read_only=True)

@@ -426,36 +426,69 @@ const handleMatch = async () => {
           <TeamTable key={teamVer} projectId={projectId} />
         </section>
       )}
-      <Dialog open={!!team || !!matchErr}
-        onClose={()=>{ setTeam(null); setMatchErr(""); }}>
-        <div className="fixed inset-0 bg-black/30" aria-hidden="true"/>
-          <div className="fixed left-1/2 top-1/3 w-96 max-w-full -translate-x-1/2 transform bg-white p-6 rounded-xl shadow-lg space-y-4">
-            <h2 className="text-lg font-medium">Результат подбора</h2>
+      <Dialog open={!!team || !!matchErr} onClose={()=>{ setTeam(null); setMatchErr(""); }}>
+  <div className="fixed inset-0 bg-black/30" aria-hidden="true"/>
+  <div
+    className="fixed left-1/2 top-1/3 w-96 max-w-full -translate-x-1/2 transform bg-white p-6 rounded-xl shadow-lg space-y-4"
+    style={{ maxHeight: "80vh", display: "flex", flexDirection: "column" }}
+  >
+    <h2 className="text-lg font-medium">Результат подбора</h2>
 
-            {matchErr && <p className="text-red-600">{matchErr}</p>}
+    {matchErr && <p className="text-red-600">{matchErr}</p>}
 
-            {team && (
-            <div>
-              <p className="mb-2 font-medium">
-                Команда #{team.id} • {team.students.length} чел.
-              </p>
-              <ul className="list-disc pl-5 space-y-1 max-h-60 overflow-y-auto">
-                {team.students.map(s=>(
-                  <li key={s.id}>
-                    {s.name} <span className="text-xs text-gray-400">({s.email})</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          )}
-
+    {team && (
+      <>
+        <div style={{ overflowY: "auto", maxHeight: "45vh" }}>
+          <p className="mb-2 font-medium">
+            Команда #{team.local_number ?? team.id} • {team.students.length} чел.
+          </p>
+          <ul className="list-disc pl-5 space-y-1">
+            {team.students.map(s=>(
+              <li key={s.id}>
+                {s.name} <span className="text-xs text-gray-400">({s.email})</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+        <div style={{ marginTop: 16, textAlign: "center" }}>
           <button
-            className="mt-4 bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
-            onClick={()=>{ setTeam(null); setMatchErr(""); }}>
-            ОК
+            className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700"
+            onClick={() => {
+              const data = {
+                team: team.local_number ?? team.id,
+                project: project?.title ?? "",
+                students: team.students.map(s => ({
+                  name: s.name,
+                  email: s.email
+                })),
+              };
+              const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
+              const url = URL.createObjectURL(blob);
+              const a = document.createElement("a");
+              a.href = url;
+              a.download = `team_${team.local_number ?? team.id}.json`;
+              a.click();
+              URL.revokeObjectURL(url);
+            }}
+          >
+            Скачать JSON
           </button>
         </div>
-      </Dialog>
+      </>
+    )}
+
+    {/* Отступ снизу для кнопки ОК */}
+    <div style={{paddingBottom: 16, textAlign: "center"}}>
+      <button
+        className="mt-4 bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+        onClick={()=>{ setTeam(null); setMatchErr(""); }}>
+        ОК
+      </button>
+    </div>
+  </div>
+</Dialog>
+
+
       <TeamHeatmap
         team={team}
         requirements={reqs.map(r=>({
