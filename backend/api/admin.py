@@ -9,7 +9,10 @@ from .models import (
 
 admin.site.register(Curator)
 #admin.site.register(Student)
-admin.site.register(Skill)
+@admin.register(Skill)
+class SkillAdmin(admin.ModelAdmin):
+    list_display = ("name", "graph_representation")
+    search_fields = ("name", "graph_representation")
 admin.site.register(Project)
 admin.site.register(ProjectSkill)
 admin.site.register(StudentSkill)

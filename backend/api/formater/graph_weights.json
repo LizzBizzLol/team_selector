@@ -1,0 +1,1838 @@
+{
+  "scikit-learn": {
+    "frameworks": 1,
+    "scipy": 1
+  },
+  "frameworks": {
+    "scikit-learn": 1,
+    "auto-sklearn": 1,
+    "tensorflow quantum": 1,
+    "scipy": 1,
+    "neural based interchangeability assessor for text generation": 1,
+    "auto-weka": 1,
+    "prolog": 1,
+    "cntk": 1,
+    "caffe": 1,
+    "jax": 1,
+    "keras": 1,
+    "lightgbm": 1,
+    "matplotlib": 1,
+    "mxnet": 1,
+    "network-x": 1,
+    "numpy": 1,
+    "python": 1,
+    "others": 1,
+    "paddle paddle": 1,
+    "pandas": 1,
+    "pycaret": 1,
+    "xgboost": 1,
+    "spacy": 1,
+    "pytorch": 1,
+    "sympy": 1,
+    "t-ngl": 1,
+    "tensorflow": 1,
+    "theano": 1,
+    "ispackagefrom": 1,
+    "issubpackagefrom": 1,
+    "thing": 1
+  },
+  "scipy": {
+    "scikit-learn": 1,
+    "frameworks": 1
+  },
+  "l1-penalized": {
+    "covariance estimation": 1
+  },
+  "covariance estimation": {
+    "l1-penalized": 1,
+    "applications": 1,
+    "empirical": 1,
+    "ledoitwolf estimator": 1,
+    "minimum covariante determinant": 1,
+    "mahalanobis distances": 1,
+    "oas": 1,
+    "robust": 1,
+    "shrinkage": 1,
+    "sparse inverse": 1
+  },
+  "describeddate": {
+    "datetime": 1
+  },
+  "datetime": {
+    "describeddate": 1
+  },
+  "ann": {
+    "dictionary": 1
+  },
+  "dictionary": {
+    "ann": 1,
+    "atp": 1,
+    "bert": 1,
+    "birch": 1,
+    "bagging": 1,
+    "blending": 1,
+    "cart": 1,
+    "cash": 1,
+    "chaid": 1,
+    "cnn": 1,
+    "curl": 1,
+    "cv": 1,
+    "dbm": 1,
+    "dbn": 1,
+    "dbscan": 1,
+    "fda": 1,
+    "gbdt": 1,
+    "gbm": 1,
+    "gbrt": 1,
+    "gpr": 1,
+    "gpu": 1,
+    "glove": 1,
+    "hdbscan": 1,
+    "hmm": 1,
+    "id3": 1,
+    "lars": 1,
+    "lda": 1,
+    "lms": 1,
+    "loess": 1,
+    "lsa": 1,
+    "lstm": 1,
+    "lvq": 1,
+    "lwl": 1,
+    "mars": 1,
+    "mcd": 1,
+    "mda": 1,
+    "mds": 1,
+    "mlp": 1,
+    "markov model": 1,
+    "markov network": 1,
+    "nisq": 1,
+    "nlg": 1,
+    "nlp": 1,
+    "nlu": 1,
+    "nubia": 1,
+    "ode": 1,
+    "olsr": 1,
+    "optics": 1,
+    "pca": 1,
+    "pcr": 1,
+    "plsr": 1,
+    "pomdp": 1,
+    "qda": 1,
+    "rnn": 1,
+    "sofm": 1,
+    "som": 1,
+    "son": 1,
+    "svm": 1,
+    "stacking": 1,
+    "td": 1,
+    "tmm": 1,
+    "knn": 1,
+    "t-sne": 1,
+    "isbyname": 1,
+    "thing": 1
+  },
+  "atp": {
+    "dictionary": 1,
+    "lars": 0.9285714285714286
+  },
+  "bert": {
+    "dictionary": 1
+  },
+  "birch": {
+    "dictionary": 1,
+    "apriori": 0.9,
+    "optics": 0.8
+  },
+  "bagging": {
+    "dictionary": 1
+  },
+  "blending": {
+    "dictionary": 1
+  },
+  "cart": {
+    "dictionary": 1,
+    "classification and regression tree": 0.25
+  },
+  "cash": {
+    "dictionary": 1,
+    "combined algorithm selection and hyperparameter optimization": 1
+  },
+  "chaid": {
+    "dictionary": 1
+  },
+  "cnn": {
+    "dictionary": 1
+  },
+  "curl": {
+    "dictionary": 1
+  },
+  "cv": {
+    "dictionary": 1
+  },
+  "dbm": {
+    "dictionary": 1
+  },
+  "dbn": {
+    "dictionary": 1,
+    "deep belief networks": 0.6666666666666667,
+    "gaussian naive bayes": 0.8888888888888888
+  },
+  "dbscan": {
+    "dictionary": 1
+  },
+  "fda": {
+    "dictionary": 1
+  },
+  "gbdt": {
+    "dictionary": 1
+  },
+  "gbm": {
+    "dictionary": 1
+  },
+  "gbrt": {
+    "dictionary": 1
+  },
+  "gpr": {
+    "dictionary": 1
+  },
+  "gpu": {
+    "dictionary": 1
+  },
+  "glove": {
+    "dictionary": 1,
+    "global vectors for word representation": 1
+  },
+  "hdbscan": {
+    "dictionary": 1
+  },
+  "hmm": {
+    "dictionary": 1,
+    "markov model": 0.6458333333333333
+  },
+  "id3": {
+    "dictionary": 1
+  },
+  "lars": {
+    "dictionary": 1,
+    "atp": 0.9285714285714286,
+    "elastic net": 0.8571428571428572,
+    "gradient boosting machine": 0.9285714285714286,
+    "plsr": 0.5,
+    "partial least squares regression": 1
+  },
+  "lda": {
+    "dictionary": 1
+  },
+  "lms": {
+    "dictionary": 1
+  },
+  "loess": {
+    "dictionary": 1,
+    "locally estimated scatterplot smoothing": 1
+  },
+  "lsa": {
+    "dictionary": 1
+  },
+  "lstm": {
+    "dictionary": 1
+  },
+  "lvq": {
+    "dictionary": 1,
+    "learning vector quantization": 1
+  },
+  "lwl": {
+    "dictionary": 1
+  },
+  "mars": {
+    "dictionary": 1,
+    "multivariate adaptive regression splines": 0.5
+  },
+  "mcd": {
+    "dictionary": 1
+  },
+  "mda": {
+    "dictionary": 1
+  },
+  "mds": {
+    "dictionary": 1,
+    "multidimensional scaling": 0.4285714285714286
+  },
+  "mlp": {
+    "dictionary": 1
+  },
+  "markov model": {
+    "dictionary": 1,
+    "hmm": 0.6458333333333333
+  },
+  "markov network": {
+    "dictionary": 1
+  },
+  "nisq": {
+    "dictionary": 1
+  },
+  "nlg": {
+    "dictionary": 1,
+    "natural language generation": 0.8
+  },
+  "nlp": {
+    "dictionary": 1
+  },
+  "nlu": {
+    "dictionary": 1,
+    "natural language understanding": 0.7631578947368421
+  },
+  "nubia": {
+    "dictionary": 1
+  },
+  "ode": {
+    "dictionary": 1
+  },
+  "olsr": {
+    "dictionary": 1
+  },
+  "optics": {
+    "dictionary": 1,
+    "birch": 0.8,
+    "ordering points to identify the clustering structure": 1
+  },
+  "pca": {
+    "dictionary": 1
+  },
+  "pcr": {
+    "dictionary": 1,
+    "principal component regression": 0.9166666666666666,
+    "plsr": 0.75
+  },
+  "plsr": {
+    "dictionary": 1,
+    "elastic net": 0.5,
+    "gradient boosting machine": 0.75,
+    "lars": 0.5,
+    "pcr": 0.75,
+    "partial least squares regression": 1
+  },
+  "pomdp": {
+    "dictionary": 1,
+    "partially observable markov decision process": 0.26315789473684215
+  },
+  "qda": {
+    "dictionary": 1,
+    "quadratic discriminant analysis": 0.6666666666666667
+  },
+  "rnn": {
+    "dictionary": 1
+  },
+  "sofm": {
+    "dictionary": 1
+  },
+  "som": {
+    "dictionary": 1
+  },
+  "son": {
+    "dictionary": 1
+  },
+  "svm": {
+    "dictionary": 1
+  },
+  "stacking": {
+    "dictionary": 1
+  },
+  "td": {
+    "dictionary": 1
+  },
+  "tmm": {
+    "dictionary": 1
+  },
+  "knn": {
+    "dictionary": 1
+  },
+  "t-sne": {
+    "dictionary": 1
+  },
+  "isbyname": {
+    "dictionary": 1
+  },
+  "thing": {
+    "dictionary": 1,
+    "frameworks": 1,
+    "applications": 1,
+    "algorithms": 1,
+    "dependencies": 1,
+    "involved": 1,
+    "mltypes": 1
+  },
+  "auto-sklearn": {
+    "frameworks": 1
+  },
+  "tensorflow quantum": {
+    "frameworks": 1
+  },
+  "neural based interchangeability assessor for text generation": {
+    "frameworks": 1
+  },
+  "auto-weka": {
+    "frameworks": 1
+  },
+  "prolog": {
+    "frameworks": 1
+  },
+  "cntk": {
+    "frameworks": 1
+  },
+  "caffe": {
+    "frameworks": 1,
+    "keras": 0.6666666666666667,
+    "tensorflow": 0.33333333333333337
+  },
+  "jax": {
+    "frameworks": 1
+  },
+  "keras": {
+    "frameworks": 1,
+    "caffe": 0.6666666666666667
+  },
+  "lightgbm": {
+    "frameworks": 1
+  },
+  "matplotlib": {
+    "frameworks": 1,
+    "numpy": 0.44999999999999996,
+    "pandas": 0.7
+  },
+  "mxnet": {
+    "frameworks": 1,
+    "tensorflow": 1
+  },
+  "network-x": {
+    "frameworks": 1
+  },
+  "numpy": {
+    "frameworks": 1,
+    "matplotlib": 0.44999999999999996
+  },
+  "python": {
+    "frameworks": 1
+  },
+  "others": {
+    "frameworks": 1
+  },
+  "paddle paddle": {
+    "frameworks": 1
+  },
+  "pandas": {
+    "frameworks": 1,
+    "matplotlib": 0.7
+  },
+  "pycaret": {
+    "frameworks": 1
+  },
+  "xgboost": {
+    "frameworks": 1
+  },
+  "spacy": {
+    "frameworks": 1
+  },
+  "pytorch": {
+    "frameworks": 1
+  },
+  "sympy": {
+    "frameworks": 1
+  },
+  "t-ngl": {
+    "frameworks": 1
+  },
+  "tensorflow": {
+    "frameworks": 1,
+    "caffe": 0.33333333333333337,
+    "mxnet": 1
+  },
+  "theano": {
+    "frameworks": 1
+  },
+  "ispackagefrom": {
+    "frameworks": 1
+  },
+  "issubpackagefrom": {
+    "frameworks": 1
+  },
+  "artificial neural network": {
+    "algorithms": 1,
+    "backpropagation": 1,
+    "hopfield network": 1,
+    "radial basis function network": 1,
+    "self-organizing feature map": 1,
+    "self-organizing map": 1,
+    "stochastic gradient descent": 1
+  },
+  "algorithms": {
+    "artificial neural network": 1,
+    "ensemble": 1,
+    "quantum machine learning": 1,
+    "markov process models": 1,
+    "association rule learning": 1,
+    "bayes": 1,
+    "least mean squares": 1,
+    "natural language processing": 1,
+    "decision tree": 1,
+    "clustering": 1,
+    "image-based": 1,
+    "deep learning": 1,
+    "dimensionality reduction": 1,
+    "regularization": 1,
+    "monte carlo simulation": 1,
+    "t-distributed stochastic neighbor embedding": 1,
+    "instance-based": 1,
+    "learning vector quantization": 1,
+    "linear models": 1,
+    "max match": 1,
+    "muti-task learning": 1,
+    "support vector machine": 1,
+    "widrow-hoff": 1,
+    "thing": 1
+  },
+  "backpropagation": {
+    "artificial neural network": 1
+  },
+  "hopfield network": {
+    "artificial neural network": 1
+  },
+  "radial basis function network": {
+    "artificial neural network": 1,
+    "gaussian process regression": 1,
+    "ordinary differential equations": 1
+  },
+  "self-organizing feature map": {
+    "artificial neural network": 1
+  },
+  "self-organizing map": {
+    "artificial neural network": 1,
+    "instance-based": 1
+  },
+  "stochastic gradient descent": {
+    "artificial neural network": 1
+  },
+  "automated theorem proving": {
+    "applications": 1
+  },
+  "applications": {
+    "automated theorem proving": 1,
+    "cluster applications": 1,
+    "algebraic equations": 1,
+    "approximate nearest neighbors in tsne": 1,
+    "audio processing": 1,
+    "the transformers": 1,
+    "autonomous driving": 1,
+    "functions": 1,
+    "optimization": 1,
+    "multilayer perceptron": 1,
+    "brain scans": 1,
+    "combined algorithm selection and hyperparameter optimization": 1,
+    "cross-validation": 1,
+    "probability calibration": 1,
+    "column transformer with heterogeneous data sources": 1,
+    "computer vision": 1,
+    "covariance estimation": 1,
+    "cross decomposition methods": 1,
+    "regression": 1,
+    "sequence-to-sequence models": 1,
+    "engenvalues": 1,
+    "image processing": 1,
+    "probabilistic models": 1,
+    "feature extraction": 1,
+    "gaussian distribution": 1,
+    "gene data analisys": 1,
+    "genetic algorithms": 1,
+    "image classification": 1,
+    "integration": 1,
+    "interpolation and splines": 1,
+    "language translator": 1,
+    "libsvm gui": 1,
+    "linear algebra": 1,
+    "multilabel classification": 1,
+    "noise foiltering": 1,
+    "non-linear technique": 1,
+    "oas estimator": 1,
+    "ordinary differential equations": 1,
+    "outlier detection": 1,
+    "parallel programming": 1,
+    "partial dependence plots": 1,
+    "personal assistant": 1,
+    "signal processing": 1,
+    "sparce matrices": 1,
+    "speech": 1,
+    "stock market prediction": 1,
+    "text classification": 1,
+    "text summarization": 1,
+    "visualization": 1,
+    "k-dimensional trees": 1,
+    "2d plotting capabilities": 1,
+    "thing": 1
+  },
+  "aaron klein": {
+    "people": 1
+  },
+  "people": {
+    "aaron klein": 1,
+    "adam coates": 1,
+    "adrin jalal": 1,
+    "alan k. ho": 1,
+    "andrea skolik": 1,
+    "antonio j. martinez": 1,
+    "dave bacon": 1,
+    "david von dollen": 1,
+    "evan peters": 1,
+    "guillaume verdon": 1,
+    "hartmut neven": 1,
+    "jae hyeon yoo": 1,
+    "jarrod r. mcclean": 1,
+    "martin leib": 1,
+    "masoud mohseni": 1,
+    "michael broughton": 1,
+    "michael streif": 1,
+    "murphy yuezhen niu": 1,
+    "philip massey": 1,
+    "ramin halavati": 1,
+    "sergei v. isakov": 1,
+    "sergio boixo": 1,
+    "trevor mccourt": 1,
+    "alexandre gramfort": 1,
+    "involved": 1,
+    "ali abdalla": 1,
+    "mohamed coulibali": 1,
+    "muhammed yusuf kocyigit": 1,
+    "pelkins ajanoh": 1,
+    "allie k. miller": 1,
+    "andreas mueller": 1,
+    "andrej karpathy": 1,
+    "andrew ng": 1,
+    "andrey andreyevich markov": 1,
+    "angelica lim": 1,
+    "aravind srinivas": 1,
+    "arthur lee samuel": 1,
+    "ben goertzel": 1,
+    "bernard widrow": 1,
+    "marcian edward hoff": 1,
+    "bertrand thirion": 1,
+    "chad e. brown": 1,
+    "josef urban": 1,
+    "chistopher d. manning": 1,
+    "davoud moulavi": 1,
+    "dzmitry bahdanau": 1,
+    "fethi bougares": 1,
+    "holger schwenk": 1,
+    "kyunghyun cho": 1,
+    "yoshua bengio": 1,
+    "enrico fermi": 1,
+    "fabio moioli": 1,
+    "fei-fei li": 1,
+    "frank hutter": 1,
+    "gael varoquaux": 1,
+    "geoffrey hinton": 1,
+    "laurens van der maaten": 1,
+    "gregory piatetsky-shapiro": 1,
+    "guillaume lemaitre": 1,
+    "hanmin qin": 1,
+    "hassan kane": 1,
+    "ilya sutskever": 1,
+    "oriol vinyals": 1,
+    "quoc v. le": 1,
+    "jan hendrik metzen": 1,
+    "jeffrey pennington": 1,
+    "joel nothman": 1,
+    "joerg sander": 1,
+    "john von neumann": 1,
+    "joris van den bossche": 1,
+    "jost tobias springenberg": 1,
+    "jéremie du boisberranger": 1,
+    "jürgen schmidhuber": 1,
+    "kai-fu lee": 1,
+    "katharina eggensperger": 1,
+    "kirk borne": 1,
+    "lex fridman": 1,
+    "loic estève": 1,
+    "manuel blum": 1,
+    "matthias feurer": 1,
+    "michael laskin": 1,
+    "nelle varoquaux": 1,
+    "nick bostrom": 1,
+    "nicolas hug": 1,
+    "noam chomsky": 1,
+    "olivier grisel": 1,
+    "p. j. rousseeuw": 1,
+    "pieter abbeel": 1,
+    "reza zadeh": 1,
+    "ricardo j. g. b. campello": 1,
+    "richard socher": 1,
+    "roman yurchak": 1,
+    "ronald van loon": 1,
+    "stanislaw ulam": 1,
+    "thomas j. fan": 1,
+    "tom dupré la tour": 1,
+    "vlad niculae": 1,
+    "vladmir vapinik": 1,
+    "yann lecun": 1,
+    "yaroslav halchenko": 1,
+    "zsolt zombori": 1,
+    "rusian leont'evich stratonovich": 1
+  },
+  "adam coates": {
+    "people": 1
+  },
+  "adrin jalal": {
+    "people": 1
+  },
+  "alan k. ho": {
+    "people": 1
+  },
+  "andrea skolik": {
+    "people": 1
+  },
+  "antonio j. martinez": {
+    "people": 1
+  },
+  "dave bacon": {
+    "people": 1
+  },
+  "david von dollen": {
+    "people": 1
+  },
+  "evan peters": {
+    "people": 1
+  },
+  "guillaume verdon": {
+    "people": 1
+  },
+  "hartmut neven": {
+    "people": 1
+  },
+  "jae hyeon yoo": {
+    "people": 1
+  },
+  "jarrod r. mcclean": {
+    "people": 1
+  },
+  "martin leib": {
+    "people": 1
+  },
+  "masoud mohseni": {
+    "people": 1
+  },
+  "michael broughton": {
+    "people": 1
+  },
+  "michael streif": {
+    "people": 1
+  },
+  "murphy yuezhen niu": {
+    "people": 1
+  },
+  "philip massey": {
+    "people": 1
+  },
+  "ramin halavati": {
+    "people": 1
+  },
+  "sergei v. isakov": {
+    "people": 1
+  },
+  "sergio boixo": {
+    "people": 1
+  },
+  "trevor mccourt": {
+    "people": 1
+  },
+  "alexandre gramfort": {
+    "people": 1
+  },
+  "involved": {
+    "people": 1,
+    "institutions": 1,
+    "thing": 1
+  },
+  "ali abdalla": {
+    "people": 1
+  },
+  "mohamed coulibali": {
+    "people": 1
+  },
+  "muhammed yusuf kocyigit": {
+    "people": 1
+  },
+  "pelkins ajanoh": {
+    "people": 1
+  },
+  "allie k. miller": {
+    "people": 1
+  },
+  "andreas mueller": {
+    "people": 1
+  },
+  "andrej karpathy": {
+    "people": 1
+  },
+  "andrew ng": {
+    "people": 1
+  },
+  "andrey andreyevich markov": {
+    "people": 1
+  },
+  "angelica lim": {
+    "people": 1
+  },
+  "aravind srinivas": {
+    "people": 1
+  },
+  "arthur lee samuel": {
+    "people": 1
+  },
+  "ben goertzel": {
+    "people": 1
+  },
+  "bernard widrow": {
+    "people": 1
+  },
+  "marcian edward hoff": {
+    "people": 1
+  },
+  "bertrand thirion": {
+    "people": 1
+  },
+  "chad e. brown": {
+    "people": 1
+  },
+  "josef urban": {
+    "people": 1
+  },
+  "chistopher d. manning": {
+    "people": 1
+  },
+  "davoud moulavi": {
+    "people": 1
+  },
+  "dzmitry bahdanau": {
+    "people": 1
+  },
+  "fethi bougares": {
+    "people": 1
+  },
+  "holger schwenk": {
+    "people": 1
+  },
+  "kyunghyun cho": {
+    "people": 1
+  },
+  "yoshua bengio": {
+    "people": 1
+  },
+  "enrico fermi": {
+    "people": 1
+  },
+  "fabio moioli": {
+    "people": 1
+  },
+  "fei-fei li": {
+    "people": 1
+  },
+  "frank hutter": {
+    "people": 1
+  },
+  "gael varoquaux": {
+    "people": 1
+  },
+  "geoffrey hinton": {
+    "people": 1
+  },
+  "laurens van der maaten": {
+    "people": 1
+  },
+  "gregory piatetsky-shapiro": {
+    "people": 1
+  },
+  "guillaume lemaitre": {
+    "people": 1
+  },
+  "hanmin qin": {
+    "people": 1
+  },
+  "hassan kane": {
+    "people": 1
+  },
+  "ilya sutskever": {
+    "people": 1
+  },
+  "oriol vinyals": {
+    "people": 1
+  },
+  "quoc v. le": {
+    "people": 1
+  },
+  "jan hendrik metzen": {
+    "people": 1
+  },
+  "jeffrey pennington": {
+    "people": 1
+  },
+  "joel nothman": {
+    "people": 1
+  },
+  "joerg sander": {
+    "people": 1
+  },
+  "john von neumann": {
+    "people": 1
+  },
+  "joris van den bossche": {
+    "people": 1
+  },
+  "jost tobias springenberg": {
+    "people": 1
+  },
+  "jéremie du boisberranger": {
+    "people": 1
+  },
+  "jürgen schmidhuber": {
+    "people": 1
+  },
+  "kai-fu lee": {
+    "people": 1
+  },
+  "katharina eggensperger": {
+    "people": 1
+  },
+  "kirk borne": {
+    "people": 1
+  },
+  "lex fridman": {
+    "people": 1
+  },
+  "loic estève": {
+    "people": 1
+  },
+  "manuel blum": {
+    "people": 1
+  },
+  "matthias feurer": {
+    "people": 1
+  },
+  "michael laskin": {
+    "people": 1
+  },
+  "nelle varoquaux": {
+    "people": 1
+  },
+  "nick bostrom": {
+    "people": 1
+  },
+  "nicolas hug": {
+    "people": 1
+  },
+  "noam chomsky": {
+    "people": 1
+  },
+  "olivier grisel": {
+    "people": 1
+  },
+  "p. j. rousseeuw": {
+    "people": 1
+  },
+  "pieter abbeel": {
+    "people": 1
+  },
+  "reza zadeh": {
+    "people": 1
+  },
+  "ricardo j. g. b. campello": {
+    "people": 1
+  },
+  "richard socher": {
+    "people": 1
+  },
+  "roman yurchak": {
+    "people": 1
+  },
+  "ronald van loon": {
+    "people": 1
+  },
+  "stanislaw ulam": {
+    "people": 1
+  },
+  "thomas j. fan": {
+    "people": 1
+  },
+  "tom dupré la tour": {
+    "people": 1
+  },
+  "vlad niculae": {
+    "people": 1
+  },
+  "vladmir vapinik": {
+    "people": 1
+  },
+  "yann lecun": {
+    "people": 1
+  },
+  "yaroslav halchenko": {
+    "people": 1
+  },
+  "zsolt zombori": {
+    "people": 1
+  },
+  "rusian leont'evich stratonovich": {
+    "people": 1
+  },
+  "adaboost": {
+    "ensemble": 1,
+    "gaussian naive bayes": 0.4444444444444444
+  },
+  "ensemble": {
+    "adaboost": 1,
+    "algorithms": 1,
+    "bootstrapped agregation": 1,
+    "bagging meta-estimator": 1,
+    "weighted average": 1,
+    "boosting": 1,
+    "forests of randomized trees": 1,
+    "gradiente bosted decision trees": 1,
+    "gradient boosting machine": 1,
+    "gradient tree boosting": 1,
+    "histogram based gradient boosting": 1,
+    "random forest": 1,
+    "stacked generalization": 1,
+    "voting classifier": 1,
+    "voting regressor": 1
+  },
+  "gaussian naive bayes": {
+    "adaboost": 0.4444444444444444,
+    "naive bayes": 1,
+    "dbn": 0.8888888888888888,
+    "deep belief networks": 0.8333333333333334
+  },
+  "bootstrapped agregation": {
+    "ensemble": 1
+  },
+  "bagging meta-estimator": {
+    "ensemble": 1
+  },
+  "weighted average": {
+    "ensemble": 1
+  },
+  "boosting": {
+    "ensemble": 1
+  },
+  "forests of randomized trees": {
+    "ensemble": 1
+  },
+  "gradiente bosted decision trees": {
+    "ensemble": 1
+  },
+  "gradient boosting machine": {
+    "ensemble": 1,
+    "lars": 0.9285714285714286,
+    "plsr": 0.75
+  },
+  "gradient tree boosting": {
+    "ensemble": 1
+  },
+  "histogram based gradient boosting": {
+    "ensemble": 1
+  },
+  "random forest": {
+    "ensemble": 1
+  },
+  "stacked generalization": {
+    "ensemble": 1
+  },
+  "voting classifier": {
+    "ensemble": 1
+  },
+  "voting regressor": {
+    "ensemble": 1
+  },
+  "agglomerative clustering on a 2d embedding of digits": {
+    "cluster applications": 1
+  },
+  "cluster applications": {
+    "agglomerative clustering on a 2d embedding of digits": 1,
+    "agglomerative clustering with and without structure": 1,
+    "agglomerative clustering with different metrics": 1,
+    "applications": 1,
+    "balanced iterative reducing and clustering using hierarchies": 1,
+    "hierarchical clustering dendrogram": 1,
+    "inductive clustering": 1,
+    "minibatchkmeans": 1,
+    "structured ward hierarchical clustering on an image of coins": 1,
+    "toy datasets": 1,
+    "hierarchical clustering: structured vs unstructured ward": 1
+  },
+  "agglomerative clustering with and without structure": {
+    "cluster applications": 1
+  },
+  "agglomerative clustering with different metrics": {
+    "cluster applications": 1
+  },
+  "balanced iterative reducing and clustering using hierarchies": {
+    "cluster applications": 1
+  },
+  "hierarchical clustering dendrogram": {
+    "cluster applications": 1
+  },
+  "inductive clustering": {
+    "cluster applications": 1
+  },
+  "minibatchkmeans": {
+    "cluster applications": 1
+  },
+  "structured ward hierarchical clustering on an image of coins": {
+    "cluster applications": 1
+  },
+  "toy datasets": {
+    "cluster applications": 1
+  },
+  "hierarchical clustering: structured vs unstructured ward": {
+    "cluster applications": 1
+  },
+  "quantum machine learning": {
+    "algorithms": 1
+  },
+  "algebraic equations": {
+    "applications": 1
+  },
+  "approximate nearest neighbors in tsne": {
+    "applications": 1
+  },
+  "audio processing": {
+    "applications": 1
+  },
+  "the transformers": {
+    "applications": 1
+  },
+  "autonomous driving": {
+    "applications": 1
+  },
+  "functions": {
+    "applications": 1,
+    "ayry functions": 1,
+    "gamma functions": 1,
+    "hankel functions": 1,
+    "orthogonal polynomials": 1
+  },
+  "optimization": {
+    "applications": 1,
+    "bfgs": 1,
+    "newton-cg": 1,
+    "simplex": 1
+  },
+  "multilayer perceptron": {
+    "applications": 1
+  },
+  "brain scans": {
+    "applications": 1
+  },
+  "combined algorithm selection and hyperparameter optimization": {
+    "applications": 1,
+    "cash": 1
+  },
+  "cross-validation": {
+    "applications": 1,
+    "cv estimator": 1,
+    "cv generator": 1,
+    "cv splitter": 1
+  },
+  "probability calibration": {
+    "applications": 1,
+    "classifiers": 1,
+    "comparison of calibration of classifiers": 1,
+    "curves": 1,
+    "3-classe classification": 1
+  },
+  "column transformer with heterogeneous data sources": {
+    "applications": 1
+  },
+  "computer vision": {
+    "applications": 1
+  },
+  "cross decomposition methods": {
+    "applications": 1
+  },
+  "regression": {
+    "applications": 1,
+    "gaussian process regression": 1,
+    "least-angle regression": 1,
+    "locally estimated scatterplot smoothing": 1,
+    "linear": 1,
+    "logistic regression": 1,
+    "multivariate adaptive regression splines": 1,
+    "ridge regression": 1,
+    "stepwise regression": 1
+  },
+  "sequence-to-sequence models": {
+    "applications": 1
+  },
+  "engenvalues": {
+    "applications": 1
+  },
+  "image processing": {
+    "applications": 1,
+    "face recognition": 1
+  },
+  "probabilistic models": {
+    "applications": 1,
+    "factor analysis": 1,
+    "probabilistic pca": 1
+  },
+  "feature extraction": {
+    "applications": 1
+  },
+  "gaussian distribution": {
+    "applications": 1
+  },
+  "gene data analisys": {
+    "applications": 1
+  },
+  "genetic algorithms": {
+    "applications": 1
+  },
+  "image classification": {
+    "applications": 1
+  },
+  "integration": {
+    "applications": 1
+  },
+  "interpolation and splines": {
+    "applications": 1
+  },
+  "language translator": {
+    "applications": 1
+  },
+  "libsvm gui": {
+    "applications": 1
+  },
+  "linear algebra": {
+    "applications": 1
+  },
+  "multilabel classification": {
+    "applications": 1
+  },
+  "noise foiltering": {
+    "applications": 1
+  },
+  "non-linear technique": {
+    "applications": 1
+  },
+  "oas estimator": {
+    "applications": 1
+  },
+  "ordinary differential equations": {
+    "applications": 1,
+    "radial basis function network": 1
+  },
+  "outlier detection": {
+    "applications": 1
+  },
+  "parallel programming": {
+    "applications": 1,
+    "naive bayes": 0.5
+  },
+  "partial dependence plots": {
+    "applications": 1
+  },
+  "personal assistant": {
+    "applications": 1
+  },
+  "signal processing": {
+    "applications": 1
+  },
+  "sparce matrices": {
+    "applications": 1
+  },
+  "speech": {
+    "applications": 1
+  },
+  "stock market prediction": {
+    "applications": 1
+  },
+  "text classification": {
+    "applications": 1
+  },
+  "text summarization": {
+    "applications": 1
+  },
+  "visualization": {
+    "applications": 1
+  },
+  "k-dimensional trees": {
+    "applications": 1
+  },
+  "2d plotting capabilities": {
+    "applications": 1
+  },
+  "markov process models": {
+    "algorithms": 1,
+    "hiden markov model": 1,
+    "hierarchical markov models": 1,
+    "markov-chain forecasting models": 1,
+    "markov chain": 1,
+    "markov decision process": 1,
+    "markov random field": 1,
+    "partially observable markov decision process": 1,
+    "tolerant markov model": 1
+  },
+  "association rule learning": {
+    "algorithms": 1,
+    "apriori": 1,
+    "eclat": 1
+  },
+  "bayes": {
+    "algorithms": 1,
+    "averaged one-dependencies estimators": 1,
+    "bayesian belief network": 1,
+    "bayesian network": 1,
+    "naive bayes": 1
+  },
+  "least mean squares": {
+    "algorithms": 1
+  },
+  "natural language processing": {
+    "algorithms": 1,
+    "bidirectional encoder representations from transformers": 1,
+    "latent dirichlet allocation": 1,
+    "natural language generation": 1,
+    "natural language understanding": 1,
+    "natural language understand": 1
+  },
+  "decision tree": {
+    "algorithms": 1,
+    "c4.5": 1,
+    "c5": 1,
+    "classification and regression tree": 1,
+    "chi-squared automatic interaction detection": 1,
+    "classification": 1,
+    "conditional decision tree": 1,
+    "decision stump": 1,
+    "iterative dichotomiser 3": 1,
+    "m5": 1
+  },
+  "clustering": {
+    "algorithms": 1,
+    "density-based spatial clustering of applications with noise": 1,
+    "expectation maximisation": 1,
+    "hierarchical density-based spatial clustering of applications with noise": 1,
+    "hierarchical clustering": 1,
+    "mean-shift": 1,
+    "minibatchmeans": 1,
+    "ordering points to identify the clustering structure": 1,
+    "spectral bi-clustering": 1,
+    "spectral co-clustering": 1,
+    "k-means": 1,
+    "k-medians": 1
+  },
+  "image-based": {
+    "algorithms": 1,
+    "contrastive unsupervised representations for reinforcement learning": 1
+  },
+  "deep learning": {
+    "algorithms": 1,
+    "global vectors for word representation": 1,
+    "deep neural networks": 1,
+    "word2vec": 1
+  },
+  "dimensionality reduction": {
+    "algorithms": 1,
+    "flexible discriminant analysis": 1,
+    "principal component analysis": 1,
+    "linear discriminant analysis": 1,
+    "mixture discriminant analysis": 1,
+    "multidimensional scaling": 1,
+    "principal component regression": 1,
+    "partial least squares regression": 1,
+    "project pursuit": 1,
+    "quadratic discriminant analysis": 1,
+    "sammon mapping": 1
+  },
+  "regularization": {
+    "algorithms": 1,
+    "elastic net": 1,
+    "least absolute shinkage and selection operator": 1
+  },
+  "monte carlo simulation": {
+    "algorithms": 1
+  },
+  "t-distributed stochastic neighbor embedding": {
+    "algorithms": 1
+  },
+  "instance-based": {
+    "algorithms": 1,
+    "locally weighted learning": 1,
+    "self-organizing map": 1,
+    "support vector machines": 1,
+    "k-nearest neighbor": 1
+  },
+  "learning vector quantization": {
+    "algorithms": 1,
+    "lvq": 1
+  },
+  "linear models": {
+    "algorithms": 1,
+    "linear regression": 1,
+    "ordinary least squares": 1,
+    "perceptron": 1
+  },
+  "max match": {
+    "algorithms": 1
+  },
+  "muti-task learning": {
+    "algorithms": 1
+  },
+  "support vector machine": {
+    "algorithms": 1
+  },
+  "widrow-hoff": {
+    "algorithms": 1
+  },
+  "operating system": {
+    "dependencies": 1,
+    "android": 1,
+    "linux": 1,
+    "macos": 0.7692307692307692,
+    "windows": 1
+  },
+  "dependencies": {
+    "operating system": 1,
+    "data base": 1,
+    "hardware": 1,
+    "software": 1,
+    "thing": 1
+  },
+  "data base": {
+    "dependencies": 1,
+    "structured": 1,
+    "unstructured": 1
+  },
+  "hardware": {
+    "dependencies": 1,
+    "graphics processing unit": 1,
+    "noisy intermediate-scale quantum processors": 1
+  },
+  "software": {
+    "dependencies": 1
+  },
+  "institutions": {
+    "involved": 1,
+    "facebook": 1,
+    "google": 1,
+    "microsoft": 1,
+    "the scipy community": 1
+  },
+  "automl": {
+    "mltypes": 1
+  },
+  "mltypes": {
+    "automl": 1,
+    "supervised learning": 1,
+    "unsupervised learning": 1,
+    "reinforcement learning": 1,
+    "semi-supervised learning": 1,
+    "thing": 1
+  },
+  "supervised learning": {
+    "mltypes": 1
+  },
+  "unsupervised learning": {
+    "mltypes": 1
+  },
+  "reinforcement learning": {
+    "mltypes": 1
+  },
+  "semi-supervised learning": {
+    "mltypes": 1
+  },
+  "hiden markov model": {
+    "markov process models": 1
+  },
+  "hierarchical markov models": {
+    "markov process models": 1
+  },
+  "markov-chain forecasting models": {
+    "markov process models": 1
+  },
+  "markov chain": {
+    "markov process models": 1
+  },
+  "markov decision process": {
+    "markov process models": 1,
+    "partially observable markov decision process": 0.052631578947368474
+  },
+  "markov random field": {
+    "markov process models": 1
+  },
+  "partially observable markov decision process": {
+    "markov process models": 1,
+    "markov decision process": 0.052631578947368474,
+    "pomdp": 0.26315789473684215
+  },
+  "tolerant markov model": {
+    "markov process models": 1
+  },
+  "android": {
+    "operating system": 1
+  },
+  "linux": {
+    "operating system": 1,
+    "macos": 0.5384615384615384
+  },
+  "macos": {
+    "operating system": 0.7692307692307692,
+    "linux": 0.5384615384615384
+  },
+  "windows": {
+    "operating system": 1
+  },
+  "apriori": {
+    "association rule learning": 1,
+    "birch": 0.9
+  },
+  "eclat": {
+    "association rule learning": 1
+  },
+  "contrastive unsupervised representations for reinforcement learning": {
+    "image-based": 1
+  },
+  "convolutional neural networks": {
+    "deep neural networks": 1
+  },
+  "deep neural networks": {
+    "convolutional neural networks": 1,
+    "recurrent neural networks": 1,
+    "deep boltzmann machine": 1,
+    "deep belief networks": 1,
+    "deep learning": 1,
+    "long short-term memory networks": 1,
+    "stacked auto-encoders": 1
+  },
+  "recurrent neural networks": {
+    "deep neural networks": 1
+  },
+  "averaged one-dependencies estimators": {
+    "bayes": 1
+  },
+  "bayesian belief network": {
+    "bayes": 1
+  },
+  "bayesian network": {
+    "bayes": 1
+  },
+  "naive bayes": {
+    "bayes": 1,
+    "bernouilli naive bayes": 1,
+    "classification and regression tree": 0.75,
+    "categorical naive bayes": 1,
+    "complement naive bayes": 1,
+    "gaussian naive bayes": 1,
+    "multinomial naive bayes": 1,
+    "parallel programming": 0.5
+  },
+  "ayry functions": {
+    "functions": 1
+  },
+  "gamma functions": {
+    "functions": 1
+  },
+  "hankel functions": {
+    "functions": 1
+  },
+  "orthogonal polynomials": {
+    "functions": 1
+  },
+  "bidirectional encoder representations from transformers": {
+    "natural language processing": 1,
+    "natural language generation": 0.9090909090909091
+  },
+  "natural language generation": {
+    "bidirectional encoder representations from transformers": 0.9090909090909091,
+    "natural language processing": 1,
+    "nlg": 0.8
+  },
+  "bfgs": {
+    "optimization": 1
+  },
+  "newton-cg": {
+    "optimization": 1
+  },
+  "simplex": {
+    "optimization": 1
+  },
+  "bernouilli naive bayes": {
+    "naive bayes": 1
+  },
+  "classification and regression tree": {
+    "naive bayes": 0.75,
+    "decision tree": 1,
+    "cart": 0.25
+  },
+  "categorical naive bayes": {
+    "naive bayes": 1
+  },
+  "complement naive bayes": {
+    "naive bayes": 1
+  },
+  "multinomial naive bayes": {
+    "naive bayes": 1
+  },
+  "latent dirichlet allocation": {
+    "natural language processing": 1
+  },
+  "natural language understanding": {
+    "natural language processing": 1,
+    "nlu": 0.7631578947368421
+  },
+  "natural language understand": {
+    "natural language processing": 1
+  },
+  "c4.5": {
+    "decision tree": 1
+  },
+  "c5": {
+    "decision tree": 1
+  },
+  "chi-squared automatic interaction detection": {
+    "decision tree": 1
+  },
+  "classification": {
+    "decision tree": 1
+  },
+  "conditional decision tree": {
+    "decision tree": 1
+  },
+  "decision stump": {
+    "decision tree": 1
+  },
+  "iterative dichotomiser 3": {
+    "decision tree": 1
+  },
+  "m5": {
+    "decision tree": 1
+  },
+  "cv estimator": {
+    "cross-validation": 1
+  },
+  "cv generator": {
+    "cross-validation": 1
+  },
+  "cv splitter": {
+    "cross-validation": 1
+  },
+  "global vectors for word representation": {
+    "deep learning": 1,
+    "glove": 1
+  },
+  "classifiers": {
+    "probability calibration": 1
+  },
+  "comparison of calibration of classifiers": {
+    "probability calibration": 1
+  },
+  "curves": {
+    "probability calibration": 1
+  },
+  "3-classe classification": {
+    "probability calibration": 1
+  },
+  "density-based spatial clustering of applications with noise": {
+    "clustering": 1
+  },
+  "expectation maximisation": {
+    "clustering": 1
+  },
+  "hierarchical density-based spatial clustering of applications with noise": {
+    "clustering": 1
+  },
+  "hierarchical clustering": {
+    "clustering": 1
+  },
+  "mean-shift": {
+    "clustering": 1
+  },
+  "minibatchmeans": {
+    "clustering": 1
+  },
+  "ordering points to identify the clustering structure": {
+    "clustering": 1,
+    "optics": 1
+  },
+  "spectral bi-clustering": {
+    "clustering": 1
+  },
+  "spectral co-clustering": {
+    "clustering": 1
+  },
+  "k-means": {
+    "clustering": 1
+  },
+  "k-medians": {
+    "clustering": 1
+  },
+  "deep boltzmann machine": {
+    "deep neural networks": 1
+  },
+  "deep belief networks": {
+    "deep neural networks": 1,
+    "dbn": 0.6666666666666667,
+    "gaussian naive bayes": 0.8333333333333334
+  },
+  "long short-term memory networks": {
+    "deep neural networks": 1
+  },
+  "stacked auto-encoders": {
+    "deep neural networks": 1
+  },
+  "empirical": {
+    "covariance estimation": 1
+  },
+  "ledoitwolf estimator": {
+    "covariance estimation": 1
+  },
+  "minimum covariante determinant": {
+    "covariance estimation": 1
+  },
+  "mahalanobis distances": {
+    "covariance estimation": 1
+  },
+  "oas": {
+    "covariance estimation": 1
+  },
+  "robust": {
+    "covariance estimation": 1
+  },
+  "shrinkage": {
+    "covariance estimation": 1
+  },
+  "sparse inverse": {
+    "covariance estimation": 1
+  },
+  "structured": {
+    "data base": 1
+  },
+  "unstructured": {
+    "data base": 1
+  },
+  "gaussian process regression": {
+    "regression": 1,
+    "radial basis function network": 1
+  },
+  "least-angle regression": {
+    "regression": 1
+  },
+  "locally estimated scatterplot smoothing": {
+    "regression": 1,
+    "loess": 1
+  },
+  "linear": {
+    "regression": 1
+  },
+  "logistic regression": {
+    "regression": 1
+  },
+  "multivariate adaptive regression splines": {
+    "regression": 1,
+    "mars": 0.5
+  },
+  "ridge regression": {
+    "regression": 1
+  },
+  "stepwise regression": {
+    "regression": 1
+  },
+  "word2vec": {
+    "deep learning": 1
+  },
+  "flexible discriminant analysis": {
+    "dimensionality reduction": 1
+  },
+  "principal component analysis": {
+    "dimensionality reduction": 1
+  },
+  "linear discriminant analysis": {
+    "dimensionality reduction": 1
+  },
+  "mixture discriminant analysis": {
+    "dimensionality reduction": 1
+  },
+  "multidimensional scaling": {
+    "dimensionality reduction": 1,
+    "mds": 0.4285714285714286
+  },
+  "principal component regression": {
+    "dimensionality reduction": 1,
+    "pcr": 0.9166666666666666
+  },
+  "partial least squares regression": {
+    "dimensionality reduction": 1,
+    "elastic net": 1,
+    "lars": 1,
+    "plsr": 1
+  },
+  "project pursuit": {
+    "dimensionality reduction": 1
+  },
+  "quadratic discriminant analysis": {
+    "dimensionality reduction": 1,
+    "qda": 0.6666666666666667
+  },
+  "sammon mapping": {
+    "dimensionality reduction": 1
+  },
+  "elastic net": {
+    "regularization": 1,
+    "lars": 0.8571428571428572,
+    "plsr": 0.5,
+    "partial least squares regression": 1
+  },
+  "least absolute shinkage and selection operator": {
+    "regularization": 1
+  },
+  "face recognition": {
+    "image processing": 1
+  },
+  "facebook": {
+    "institutions": 1
+  },
+  "google": {
+    "institutions": 1
+  },
+  "microsoft": {
+    "institutions": 1
+  },
+  "the scipy community": {
+    "institutions": 1
+  },
+  "factor analysis": {
+    "probabilistic models": 1
+  },
+  "probabilistic pca": {
+    "probabilistic models": 1
+  },
+  "graphics processing unit": {
+    "hardware": 1
+  },
+  "noisy intermediate-scale quantum processors": {
+    "hardware": 1
+  },
+  "locally weighted learning": {
+    "instance-based": 1
+  },
+  "support vector machines": {
+    "instance-based": 1
+  },
+  "k-nearest neighbor": {
+    "instance-based": 1
+  },
+  "linear regression": {
+    "linear models": 1
+  },
+  "ordinary least squares": {
+    "linear models": 1
+  },
+  "perceptron": {
+    "linear models": 1
+  }
+}
