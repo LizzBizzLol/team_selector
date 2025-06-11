@@ -26,6 +26,7 @@ from .serializers import (
     ProjectSerializer,
     ProjectSkillSerializer,
     TeamSerializer,
+    VirtualTeamSerializer,
 )
 from .matching import match_team
 
@@ -53,7 +54,11 @@ class StudentViewSet(viewsets.ModelViewSet):
         qs = super().get_queryset()
         search = self.request.query_params.get("search")
         if search:
-            qs = qs.filter(name__icontains=search)
+            search_terms = search.split()
+            query = Q()
+            for term in search_terms:
+                query |= Q(name__icontains=term) | Q(email__icontains=term)
+            qs = qs.filter(query)
         return qs.order_by("name")
 
 class StudentSkillViewSet(viewsets.ModelViewSet):
@@ -69,7 +74,9 @@ class SkillViewSet(viewsets.ModelViewSet):
     serializer_class = SkillSerializer
 
     def get_queryset(self):
-        qs = super().get_queryset()
+        qs = super().get_queryset().annotate(
+            students_count=Count('studentskill', distinct=True)
+        )
         search = self.request.query_params.get("search")
         if search:
             qs = qs.filter(name__icontains=search)
@@ -226,48 +233,112 @@ class ProjectViewSet(viewsets.ModelViewSet):
 
     @action(detail=True, methods=["post"])
     def match(self, request, pk=None):
-        """
-        Подбирает команду под проект (greedy-score в matching.py),
-        создаёт объект Team и возвращает его в виде
-        { id, project, students: [ {id, name, email, …}, … ], created_at }.
-        """
         project = self.get_object()
-
-        if not project.skill_links.exists():
-            return Response(
-                {"detail": "У проекта нет требований – подбирать нечего"},
-                status=status.HTTP_400_BAD_REQUEST
-            )
-
-        user_ids = match_team(project)          # <-- algorithm
-
-        if not user_ids:
-            return Response(
-                {"detail": "Ни один студент не подошёл"},
-                status=status.HTTP_200_OK
-            )
-
-        # ──────────────────────────────────────────────────────────────
-        # 1. проверяем, есть ли уже команда с тем же составом
-        # ──────────────────────────────────────────────────────────────
-        same_size = Team.objects.filter(project=project
-                       ).annotate(n=Count("students")
-                       ).filter(n=len(user_ids))
-
-        for t in same_size.prefetch_related("students"):
-            if set(t.students.values_list("id", flat=True)) == set(user_ids):
-                # нашли дубликат → возвращаем существующую
-                return Response(TeamSerializer(t).data, status=status.HTTP_200_OK)
-
-        # ──────────────────────────────────────────────────────────────
-        # 2. иначе создаём новую
-        # ──────────────────────────────────────────────────────────────
-        team = Team.objects.create(project=project)
-        team.students.set(user_ids)
-
-        return Response(TeamSerializer(team).data, status=status.HTTP_201_CREATED)
+        external_students = request.data.get("external_students")
         
-    
+        if external_students:
+            # Используем внешний список студентов
+            students_data = external_students
+        else:
+            # Используем студентов из БД
+            students_data = None
+            
+        team = match_team(project, students_data)
+        if not team:
+            return Response(
+                {"detail": "Не удалось подобрать команду"},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+        return Response(TeamSerializer(team).data)
+
+    @action(detail=True, methods=["post"])
+    def match_with_file(self, request, pk=None):
+        """
+        Формирование команды из внешнего файла со студентами.
+        Принимает JSON файл со структурой:
+        {
+            "students": [
+                {
+                    "name": "Иванов Иван",
+                    "email": "ivanov@example.com",
+                    "skills": [
+                        {"skill_name": "Python", "level": 0.8},
+                        {"skill_name": "SQL", "level": 0.6}
+                    ]
+                }
+            ]
+        }
+        """
+        try:
+            project = self.get_object()
+            students_data = request.data.get("students", [])
+            
+            if not students_data:
+                return Response(
+                    {"detail": "Файл не содержит данных о студентах"},
+                    status=status.HTTP_400_BAD_REQUEST,
+                )
+
+            # Проверяем структуру данных
+            for student in students_data:
+                if not isinstance(student, dict):
+                    return Response(
+                        {"detail": "Неверный формат данных студента"},
+                        status=status.HTTP_400_BAD_REQUEST,
+                    )
+                
+                if not all(k in student for k in ["name", "email", "skills"]):
+                    return Response(
+                        {"detail": "У студента отсутствуют обязательные поля: name, email, skills"},
+                        status=status.HTTP_400_BAD_REQUEST,
+                    )
+                
+                if not isinstance(student["skills"], list):
+                    return Response(
+                        {"detail": "Поле skills должно быть списком"},
+                        status=status.HTTP_400_BAD_REQUEST,
+                    )
+                
+                for skill in student["skills"]:
+                    if not isinstance(skill, dict) or not all(k in skill for k in ["skill_name", "level"]):
+                        return Response(
+                            {"detail": "Неверный формат навыка"},
+                            status=status.HTTP_400_BAD_REQUEST,
+                        )
+                    
+                    try:
+                        level = float(skill["level"])
+                        if level < 0 or level > 1:
+                            return Response(
+                                {"detail": "Уровень навыка должен быть от 0 до 1"},
+                                status=status.HTTP_400_BAD_REQUEST,
+                            )
+                    except (ValueError, TypeError):
+                        return Response(
+                            {"detail": "Уровень навыка должен быть числом"},
+                            status=status.HTTP_400_BAD_REQUEST,
+                        )
+            
+            team = match_team(project, students_data)
+            if not team:
+                min_n = getattr(project, 'min_participants', 1)
+                max_n = getattr(project, 'max_participants', len(students_data))
+                return Response(
+                    {"detail": f"Не удалось подобрать команду: недостаточно подходящих кандидатов (требуется от {min_n} до {max_n})"},
+                    status=status.HTTP_400_BAD_REQUEST,
+                )
+            
+            # Если команда виртуальная (dict), сериализуем через VirtualTeamSerializer
+            if isinstance(team, dict):
+                return Response(VirtualTeamSerializer(team).data)
+            return Response(TeamSerializer(team).data)
+            
+        except Exception as e:
+            return Response(
+                {"detail": f"Произошла ошибка при формировании команды: {str(e)}"},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            )
+
     @action(detail=False, methods=["post"])
     def import_project(self, request):
         """

@@ -12,6 +12,7 @@ import humanizeError   from "../utils/humanizeError";
 import useUnsavedPrompt from "../hooks/useUnsavedPrompt";
 import { unwrap }      from "../utils/unwrap";
 import TeamHeatmap from "../components/TeamHeatmap";  
+import TeamFormationModal from "../components/TeamFormationModal";
 
 /* ------------------------------------------------------------------ */
 /*  CreateProjectPage                                                 */
@@ -308,6 +309,8 @@ const handleMatch = async () => {
     }
   };
 
+  const [showFormationModal, setShowFormationModal] = useState(false);
+
   if (!project) return <p className="text-center mt-8">Загрузка…</p>;
 
   /* ───── UI ───── */
@@ -327,10 +330,10 @@ const handleMatch = async () => {
 
         {!edit && (
           <button
-            onClick={handleMatch}
+            onClick={() => setShowFormationModal(true)}
             className="px-3 py-1 border border-green-600 text-green-600 rounded hover:bg-green-50"
           >
-            {matching ? "Подбор…" : "Сформировать команду"}
+            Сформировать команду
           </button>
         )}
 
@@ -496,6 +499,12 @@ const handleMatch = async () => {
           skill_name: r.skill.name,
           level: r.level
         }))}
+      />
+
+      <TeamFormationModal
+        open={showFormationModal}
+        onClose={() => setShowFormationModal(false)}
+        projectId={projectId}
       />
     </div>
   );

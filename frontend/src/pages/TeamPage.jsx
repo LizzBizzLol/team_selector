@@ -74,7 +74,13 @@ export default function TeamPage() {
       <ul className="list-disc pl-6 space-y-1">
         {team.students.map((s) => (
           <li key={s.id}>
-            {s.name} <span className="text-xs text-gray-400">({s.email})</span>
+            <Link 
+              to={`/student/${s.id}`}
+              className="text-blue-600 hover:underline"
+            >
+              {s.name}
+            </Link>
+            <span className="text-xs text-gray-400"> ({s.email})</span>
           </li>
         ))}
       </ul>

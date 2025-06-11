@@ -19,11 +19,27 @@ export default function TeamHeatmap({ team, project }) {
 
   // Получить уровень навыка у студента
   function getSkillLevel(student, skillName) {
-    if (!Array.isArray(student.skills)) return null;
-    const found = student.skills.find(
-      s => s.skill_name === skillName || s.skill?.name === skillName
-    );
-    return found ? found.level : null;
+    // matched_skills (только для виртуальных студентов)
+    if (Array.isArray(student.matched_skills)) {
+      const found = student.matched_skills.find(
+        s => s.skill_name === skillName
+      );
+      return found ? found.student_level : null;
+    }
+    // skills (только для студентов из БД)
+    if (Array.isArray(student.skills)) {
+      const found = student.skills.find(
+        s => s.skill_name === skillName || s.skill?.name === skillName
+      );
+      if (found) {
+        // Преобразуем из 0-1 в 1-5, если нужно
+        let lvl = found.level;
+        if (lvl <= 1) lvl = +(lvl * 5).toFixed(2);
+        return lvl;
+      }
+      return null;
+    }
+    return null;
   }
 
   return (
@@ -35,9 +51,8 @@ export default function TeamHeatmap({ team, project }) {
             {reqs.map((r, i) => (
               <th key={r.skill?.id || r.skill_name || i} className="px-3 py-2">
                 {r.skill_name || r.skill?.name}
-                <br />
-                <span className="text-xs text-gray-500">
-                  уровень: {r.level}
+                <span className="text-xs text-gray-500 block">
+                  (уровень: {r.level})
                 </span>
               </th>
             ))}
@@ -74,12 +89,15 @@ export default function TeamHeatmap({ team, project }) {
                           : { background: "#f3f4f6", color: "#bbb" }
                       }
                     >
-                      {typeof lvl === "number" /*Проценты, снизу просто 0-1*/
-                        ? (r.level ? Math.round(Math.min(lvl / r.level, 1) * 100) + "%" : "—")
+                      {typeof lvl === "number"
+                        ? (
+                            <>
+                              <span>{lvl.toFixed(2)}</span>
+                              <br />
+                              <span className="text-xs text-gray-500">{r.level ? Math.round(Math.min(lvl / r.level, 1) * 100) + "%" : "—"}</span>
+                            </>
+                          )
                         : "—"}
-                      {/* {typeof lvl === "number"
-                        ? (r.level ? Math.min(lvl / r.level, 1).toFixed(2) : "—")
-                        : "—"} */}
                     </td>
                   );
                 })}

@@ -3,7 +3,6 @@ import { Link, useLocation } from 'react-router-dom';
 import api from '../api';
 import useSorter from "../hooks/useSorter";
 import SkillCombobox from "./SkillCombobox";          // ⬅ уже есть
-import filterStudents from "../utils/filterStudents";
 import { unwrap } from '../utils/unwrap';
 
 export default function StudentList() {
@@ -13,39 +12,25 @@ export default function StudentList() {
   const [minLvl, setMinLvl]     = useState(1);
   const { sort, sorted, toggle } = useSorter("name");  // по имени по умолч.
   const location = useLocation();
+
   useEffect(() => {
-    api.get('students/')
+    const params = {
+      search: query || undefined,
+      skill: skill?.id || undefined,
+      min_level: minLvl || undefined,
+      limit: 1000
+    };
+    api.get('students/', { params })
        .then(({ data }) => setStudents(unwrap(data)))
        .catch(console.error);
-  }, []);
+  }, [query, skill, minLvl]);
 
-  if (!students.length) {
-    return (
-      <div className="max-w-2xl mx-auto p-8 text-center">
-        <p className="mb-4 text-gray-600">Пока нет ни одного студента.</p>
-        <Link
-          to="/"
-          state={{ from: location.pathname + location.search }}
-          className="inline-block bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
-        >
-          Вернуться
-        </Link>
-      </div>
-    );
-  }
   const listWithLens = students.map(s => ({
     ...s,
     skillsLen: s.skills?.length ?? 0          // ← новое поле-счётчик
   }));
 
-  /* ---- применяем фильтр-поиск ---- */
-  const visible = sorted(
-    filterStudents(listWithLens, {
-      q: query,
-      skillId: skill?.id ?? null,
-      minLvl
-    })
-  );
+  const visible = sorted(listWithLens);
 
   return (
     <div className="overflow-x-auto">
@@ -105,22 +90,23 @@ export default function StudentList() {
           </tr>
         </thead>
         <tbody>
-          {visible.map(s => (
-            <tr key={s.id} className="border-t">
-              <td className="px-4 py-2">
-                <Link to={`/student/${s.id}`}
-                  state={{ from: location.pathname + location.search }}
-                  className="text-blue-600 hover:underline">
-                  {s.name}
-                </Link>
-              </td>
-              <td className="px-4 py-2">{s.email}</td>
-              <td className="px-4 py-2">{s.skillsLen}</td>
-            </tr>
-          ))}
-          {visible.length === 0 && (
+          {visible.length > 0 ? (
+            visible.map(s => (
+              <tr key={s.id} className="border-t">
+                <td className="px-4 py-2">
+                  <Link to={`/student/${s.id}`}
+                    state={{ from: location.pathname + location.search }}
+                    className="text-blue-600 hover:underline">
+                    {s.name}
+                  </Link>
+                </td>
+                <td className="px-4 py-2">{s.email}</td>
+                <td className="px-4 py-2">{s.skillsLen}</td>
+              </tr>
+            ))
+          ) : (
             <tr><td colSpan={3} className="text-center py-6 text-gray-500">
-              Ничего не найдено
+              Нет результатов поиска
             </td></tr>
           )}
         </tbody>

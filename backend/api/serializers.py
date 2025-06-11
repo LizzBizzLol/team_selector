@@ -14,6 +14,8 @@ class SkillSerializer(serializers.ModelSerializer):
             message="Навык с таким названием уже существует"
         )]
     )
+    students_count = serializers.IntegerField(read_only=True)
+
     class Meta:
         model = Skill
         fields = "__all__"
@@ -116,8 +118,41 @@ class TeamStudentDetailSerializer(serializers.ModelSerializer):
             })
         return out
 
+class VirtualStudentSerializer(serializers.Serializer):
+    name = serializers.CharField()
+    email = serializers.EmailField()
+    matched_skills = serializers.ListField()
+    score = serializers.FloatField(required=False)
+
+class VirtualTeamSerializer(serializers.Serializer):
+    project = serializers.IntegerField()
+    students = VirtualStudentSerializer(many=True)
+
+class TeamStudentSerializer(serializers.ModelSerializer):
+    # matched_skills только для виртуальных студентов (dict), для БД — только skills
+    skills = StudentSkillSerializer(many=True, read_only=True)
+    matched_skills = serializers.ListField(required=False)
+
+    class Meta:
+        model = Student
+        fields = ("id", "name", "email", "skills", "matched_skills")
+
+    def to_representation(self, instance):
+        # Если это виртуальный студент (dict), matched_skills есть
+        if isinstance(instance, dict):
+            return {
+                "name": instance.get("name"),
+                "email": instance.get("email"),
+                "matched_skills": instance.get("matched_skills", []),
+                "score": instance.get("score", 0),
+            }
+        # Если это студент из БД — только skills
+        data = super().to_representation(instance)
+        data.pop("matched_skills", None)
+        return data
+
 class TeamSerializer(serializers.ModelSerializer):
-    students = StudentSerializer(many=True, read_only=True)
+    students = TeamStudentSerializer(many=True, read_only=True)
 
     class Meta:
         model = Team

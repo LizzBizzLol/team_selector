@@ -34,8 +34,7 @@ export default function StudentCard() {
       {student.skills.map((s) => (
         <tr key={s.skill_id || s.skill_name}>
           <td className="px-3 py-2">
-            {/* Тут можно сделать ссылку на навык, если нужно */}
-            <Link className="text-blue-600 hover:underline" to={`/skill/${s.skill_id}`}>{s.skill_name}</Link>
+            <Link className="text-blue-600 hover:underline" to={`/skill/${s.skill}`}>{s.skill_name}</Link>
           </td>
           <td className="px-3 py-2">{level01to05(s.level)}</td>
         </tr>

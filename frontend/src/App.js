@@ -12,11 +12,18 @@ import Projects from "./pages/ProjectListPage";
 import UserCard from "./pages/UserCard";
 import StudentCard from "./pages/StudentCards";
 import TeamPage from "./pages/TeamPage";
+import SkillCard from "./pages/SkillCard";
 
 /* ---------- обёртка для /project/:id ---------- */
 function ProjectWrapper() {
   const { id } = useParams();
   return <ProjectCard projectId={id} />;
+}
+
+/* ---------- обёртка для /skill/:id ---------- */
+function SkillWrapper() {
+  const { id } = useParams();
+  return <SkillCard skillId={id} />;
 }
 
 /* ---------- навигационная ссылка с актив‑стилем ---------- */
@@ -53,16 +60,15 @@ export default function App() {
 
       {/* ==== страницы ==== */}
       <Routes>
-        <Route path="/create"     element={<CreateProjectPage />} />
-        <Route path="/project/:id"element={<ProjectWrapper   />} />
-        <Route path="/projects"   element={<Projects />} />
-        {/* админ–панель */}
+        <Route path="/" element={<Projects />} />
+        <Route path="/create" element={<CreateProjectPage />} />
+        <Route path="/project/:id" element={<ProjectWrapper />} />
+        <Route path="/team/:id" element={<TeamPage />} />
         <Route path="/admin" element={<AdminDashboard />} />
-        {/* прочие пути */}
         <Route path="/user/:id" element={<UserCard />} />
         <Route path="/student/:id" element={<StudentCard />} />
+        <Route path="/skill/:id" element={<SkillWrapper />} />
         <Route path="*"         element={<CreateProjectPage />} />
-        <Route path="/team/:id" element={<TeamPage />} />
       </Routes>
     </BrowserRouter>
   );
