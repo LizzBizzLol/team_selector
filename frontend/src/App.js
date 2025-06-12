@@ -11,6 +11,7 @@ import AdminDashboard from "./pages/AdminDashboard";
 import Projects from "./pages/ProjectListPage";
 import UserCard from "./pages/UserCard";
 import StudentCard from "./pages/StudentCards";
+import SkillCard from "./pages/SkillCard";
 import TeamPage from "./pages/TeamPage";
 
 /* ---------- обёртка для /project/:id ---------- */
@@ -61,6 +62,7 @@ export default function App() {
         {/* прочие пути */}
         <Route path="/user/:id" element={<UserCard />} />
         <Route path="/student/:id" element={<StudentCard />} />
+        <Route path="/skill/:id" element={<SkillCard />} />
         <Route path="*"         element={<CreateProjectPage />} />
         <Route path="/team/:id" element={<TeamPage />} />
       </Routes>

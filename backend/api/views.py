@@ -33,7 +33,7 @@ from .matching import match_team
 class CuratorViewSet(viewsets.ModelViewSet):
     queryset = Curator.objects.all()
     serializer_class = CuratorSerializer
-    pagination_class = NoPagination   # ✨
+    page_size = 30  # ✨ пагинация по 30 кураторов
 
     def get_queryset(self):
         qs = super().get_queryset().annotate(projects_count=Count("curated_projects"))
@@ -48,6 +48,7 @@ class StudentViewSet(viewsets.ModelViewSet):
     """
     queryset = Student.objects.all()
     serializer_class = StudentSerializer
+    page_size = 30  # ✨ пагинация по 30 студентов
 
     def get_queryset(self):
         qs = super().get_queryset()
@@ -67,13 +68,40 @@ class StudentSkillViewSet(viewsets.ModelViewSet):
 class SkillViewSet(viewsets.ModelViewSet):
     queryset = Skill.objects.all()
     serializer_class = SkillSerializer
+    page_size = 30  # ✨ пагинация по 30 навыков
 
     def get_queryset(self):
-        qs = super().get_queryset()
+        qs = super().get_queryset().annotate(
+            students_count=Count('studentskill', distinct=True)
+        )
         search = self.request.query_params.get("search")
         if search:
             qs = qs.filter(name__icontains=search)
         return qs.order_by("name")
+
+    @action(detail=True, methods=['get'])
+    def students(self, request, pk=None):
+        """Получить список студентов, владеющих данным навыком"""
+        skill = self.get_object()
+        students = Student.objects.filter(skills__skill=skill).distinct()
+        
+        # Добавляем уровень навыка для каждого студента
+        students_with_levels = []
+        for student in students:
+            try:
+                student_skill = StudentSkill.objects.get(student=student, skill=skill)
+                level = student_skill.level
+            except StudentSkill.DoesNotExist:
+                level = 0
+            
+            students_with_levels.append({
+                'id': student.id,
+                'name': student.name,
+                'email': student.email,
+                'skill_level': level
+            })
+        
+        return Response(students_with_levels)
     
 
 class ProjectSkillViewSet(viewsets.ModelViewSet):
@@ -92,6 +120,8 @@ class TeamViewSet(viewsets.ModelViewSet):
         "students__skills__skill", "project"
     )
     serializer_class = TeamSerializer
+    pagination_class = NoPagination   # ✨ отключаем пагинацию
+    
     def get_queryset(self):
         qs = super().get_queryset()
         proj_id = self.request.query_params.get("project")
@@ -111,6 +141,7 @@ class ProjectViewSet(viewsets.ModelViewSet):
     """
     queryset = Project.objects.all()
     serializer_class = ProjectSerializer
+    page_size = 30  # ✨ пагинация по 30 проектов
     authentication_classes = []
     permission_classes = [AllowAny]
 

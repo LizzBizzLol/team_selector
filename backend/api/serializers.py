@@ -8,6 +8,7 @@ from .models import (
 )
 
 class SkillSerializer(serializers.ModelSerializer):
+    students_count = serializers.IntegerField(read_only=True)
     name = serializers.CharField(
         validators=[UniqueValidator(
             queryset=Skill.objects.all(),
@@ -16,7 +17,7 @@ class SkillSerializer(serializers.ModelSerializer):
     )
     class Meta:
         model = Skill
-        fields = "__all__"
+        fields = ("id", "name", "graph_representation", "students_count")
 
 class ProjectSkillSerializer(serializers.ModelSerializer):
     skill_id   = serializers.IntegerField(source="skill.id", read_only=True)
@@ -46,10 +47,11 @@ class CuratorSerializer(serializers.ModelSerializer):
         fields = ("id", "name", "email", "projects_count", "projects")
 
 class StudentSkillSerializer(serializers.ModelSerializer):
+    skill_id = serializers.IntegerField(source="skill.id", read_only=True)
     skill_name = serializers.CharField(source="skill.name", read_only=True)
     class Meta:
         model = StudentSkill
-        fields = ("id","student","skill","skill_name","level")
+        fields = ("id","student","skill","skill_id","skill_name","level")
         extra_kwargs = {
             "student": {"write_only": True},
             "skill":   {"write_only": True},
