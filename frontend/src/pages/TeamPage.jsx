@@ -74,13 +74,73 @@ export default function TeamPage() {
       <ul className="list-disc pl-6 space-y-1">
         {team.students.map((s) => (
           <li key={s.id}>
-            {s.name} <span className="text-xs text-gray-400">({s.email})</span>
+            <Link 
+              to={`/student/${s.id}`}
+              className="text-blue-600 hover:underline"
+            >
+              {s.name}
+            </Link> 
+            <span className="text-xs text-gray-400">({s.email})</span>
           </li>
         ))}
       </ul>
 
-      <h2 className="font-medium mt-6 mb-2">Тепловая карта соответствия</h2>
+      <h2 className="font-medium mt-6 mb-2">Соответствие требованиям</h2>
       <TeamHeatmap team={team} project={project} />
+
+      {/* Детальная информация о сопоставлении навыков */}
+      {team.students.some(s => s.skills && s.skills.length > 0) && (
+        <>
+          <h2 className="font-medium mt-6 mb-2">Детали сопоставления навыков</h2>
+          <div className="space-y-4">
+            {team.students.map((student) => (
+              <div key={student.id} className="border rounded-lg p-4">
+                <h3 className="font-medium mb-2">
+                  <Link 
+                    to={`/student/${student.id}`}
+                    className="text-blue-600 hover:underline"
+                  >
+                    {student.name}
+                  </Link>
+                </h3>
+                {student.skills && student.skills.length > 0 ? (
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-2 text-sm">
+                    {student.skills.map((skill, idx) => (
+                      <div key={idx} className="flex justify-between items-center p-2 bg-gray-50 rounded">
+                        <div>
+                          <span className="font-medium">
+                            <Link 
+                              to={`/skill/${skill.skill_id}`}
+                              className="text-blue-600 hover:underline"
+                            >
+                              {skill.skill_name}
+                            </Link>
+                          </span>
+                          {skill.matched_skill_name && skill.matched_skill_name !== skill.skill_name && (
+                            <div className="text-xs text-gray-600">
+                              → {skill.matched_skill_name}
+                            </div>
+                          )}
+                        </div>
+                        <div className="text-right">
+                          <div className="text-xs text-gray-500">
+                            {skill.student_level} / {skill.required_level}
+                          </div>
+                          <div className="font-medium text-green-600">
+                            {Math.round(skill.score * 100)}%
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <p className="text-gray-500 text-sm">Нет информации о навыках</p>
+                )}
+              </div>
+            ))}
+          </div>
+        </>
+      )}
     </div>
     </main>
   );

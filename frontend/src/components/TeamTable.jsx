@@ -59,7 +59,16 @@ export default function TeamTable({ projectId }) {
       </td>
       <td className="px-3 py-1">
         <ul className="list-disc pl-5">
-          {t.students.map(s => <li key={s.id}>{s.name}</li>)}
+          {t.students.map(s => (
+            <li key={s.id}>
+              <Link 
+                to={`/student/${s.id}`}
+                className="text-blue-600 hover:underline"
+              >
+                {s.name}
+              </Link>
+            </li>
+          ))}
         </ul>
         {/* Кнопка-ссылка "Смотреть" */}
         <Link

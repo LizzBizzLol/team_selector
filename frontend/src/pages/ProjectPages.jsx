@@ -153,7 +153,11 @@ export default function CreateProjectPage() {
       {/* ---------- куратор ---------- */}
       <div>
         <label className="block mb-1 font-medium">Куратор</label>
-        <UserCombobox value={curator} onChange={v=>{setCurator(v); markDirty();}}/>
+        <UserCombobox 
+          value={curator} 
+          onChange={v=>{setCurator(v); markDirty();}}
+          onDirty={markDirty}
+        />
       </div>
 
       {/* ---------- min/max ---------- */}
@@ -190,7 +194,16 @@ export default function CreateProjectPage() {
             <input type="number" min="1" max="5"
                    className="border w-24 text-center px-3 py-2 rounded-lg focus:ring-2 focus:ring-blue-500"
                    value={r.level}
-                   onChange={e=>updateRequirement(i,"level",+e.target.value)}/>
+                   onChange={e=>{
+                     const val = Math.max(1, Math.min(5, +e.target.value || 1));
+                     updateRequirement(i,"level",val);
+                   }}
+                   onBlur={e=>{
+                     if (!e.target.value || +e.target.value < 1) {
+                       updateRequirement(i,"level",1);
+                     }
+                   }}
+                   required/>
             {requirements.length>1 &&
               <button type="button" className="text-red-500 px-2"
                       onClick={()=>removeRequirement(i)}>✖</button>}
@@ -365,8 +378,11 @@ const handleMatch = async () => {
       <div>
         <label className="block mb-1 font-medium">Куратор</label>
         {edit ? (
-          <UserCombobox value={curator}
-                        onChange={v=>{ setCurator(v); markDirty(); }}/>
+          <UserCombobox 
+            value={curator}
+            onChange={v=>{ setCurator(v); markDirty(); }}
+            onDirty={markDirty}
+          />
         ) : (
           project.curator
             ? <Link to={`/user/${project.curator.id}`}
@@ -393,9 +409,17 @@ const handleMatch = async () => {
                        className="border w-24 text-center px-3 py-2 rounded-lg focus:ring-2 focus:ring-blue-500"
                        value={r.level}
                        onChange={e=>{
-                         const arr=[...reqs]; arr[i].level=+e.target.value||1;
+                         const val = Math.max(1, Math.min(5, +e.target.value || 1));
+                         const arr=[...reqs]; arr[i].level=val;
                          setReqs(arr); markDirty();
-                       }}/>
+                       }}
+                       onBlur={e=>{
+                         if (!e.target.value || +e.target.value < 1) {
+                           const arr=[...reqs]; arr[i].level=1;
+                           setReqs(arr); markDirty();
+                         }
+                       }}
+                       required/>
                 {reqs.length>1 &&
                   <button type="button" className="text-red-500 px-2"
                           onClick={()=>{ setReqs(reqs.filter((_,idx)=>idx!==i)); markDirty(); }}>
@@ -445,7 +469,13 @@ const handleMatch = async () => {
           <ul className="list-disc pl-5 space-y-1">
             {team.students.map(s=>(
               <li key={s.id}>
-                {s.name} <span className="text-xs text-gray-400">({s.email})</span>
+                <Link 
+                  to={`/student/${s.id}`}
+                  className="text-blue-600 hover:underline"
+                >
+                  {s.name}
+                </Link> 
+                <span className="text-xs text-gray-400">({s.email})</span>
               </li>
             ))}
           </ul>

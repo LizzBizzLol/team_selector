@@ -1,4 +1,5 @@
 import useSorter from "../hooks/useSorter";
+import { Link } from "react-router-dom";
 
 export default function RequirementsTable({ reqs }) {
   const { sort, sorted, toggle } = useSorter("skill_name");
@@ -26,7 +27,18 @@ export default function RequirementsTable({ reqs }) {
       <tbody>
         {sorted(reqs).map((r) => (
           <tr key={r.skill} className="border-t">
-            <td className="px-3 py-1">{r.skill?.name ?? r.skill_name ?? "—"} </td>
+            <td className="px-3 py-1">
+              {r.skill?.id ? (
+                <Link 
+                  to={`/skill/${r.skill.id}`}
+                  className="text-blue-600 hover:underline"
+                >
+                  {r.skill.name}
+                </Link>
+              ) : (
+                r.skill?.name ?? r.skill_name ?? "—"
+              )}
+            </td>
             <td className="px-3 py-1">{r.level}</td>
           </tr>
         ))}

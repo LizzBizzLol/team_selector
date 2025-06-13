@@ -10,9 +10,9 @@ export default function UserCombobox({ value, onChange, onDirty }) {
 
   useEffect(() => {
     const t = setTimeout(async () => {
-      // теперь ищем по реальному API /curators/
+      // Загружаем всех кураторов без фильтрации на бэкенде
       const { data } = await api.get("curators/", {
-        params: { search: query.trim(), limit: 100 }
+        params: { limit: 100 }
       });
       const arr = unwrap(data);
       // если выбранный куратор не попал в первые 100 — добавим
@@ -20,7 +20,13 @@ export default function UserCombobox({ value, onChange, onDirty }) {
       setUsers(arr);
     }, 300);
     return () => clearTimeout(t);
-  }, [query, value]);
+  }, [value]); // Убрал query из зависимостей
+
+  // Фильтруем результаты по запросу (нечувствительно к регистру)
+  const filteredUsers = users.filter(user => 
+    user.name.toLowerCase().includes(query.toLowerCase()) ||
+    user.email.toLowerCase().includes(query.toLowerCase())
+  );
 
   return (
     <Combobox value={value} onChange={onChange} by="id">
@@ -30,15 +36,15 @@ export default function UserCombobox({ value, onChange, onDirty }) {
           displayValue={(v) => v?.name || ""}
           onChange={(e) => {
             setQuery(e.target.value.trim());
-            onDirty(true);
+            if (onDirty) onDirty(true);
           }}
           placeholder="Выберите куратора"
         />
         <Combobox.Button className="absolute inset-y-0 right-0 flex items-center pr-3" />
 
-        {users.length > 0 && (
+        {filteredUsers.length > 0 && (
           <Combobox.Options className="absolute z-10 mt-1 max-h-56 w-full overflow-auto rounded-md bg-white shadow ring-1 ring-black/5">
-            {users.map((u) => (
+            {filteredUsers.map((u) => (
               <Combobox.Option key={u.id} value={u}>
                 {({ active }) => (
                   <div className={`px-4 py-2 ${active ? "bg-blue-600 text-white" : "text-gray-900"}`}>
@@ -49,7 +55,7 @@ export default function UserCombobox({ value, onChange, onDirty }) {
             ))}
           </Combobox.Options>
         )}
-        {query.trim() && users.length === 0 && (
+        {query.trim() && filteredUsers.length === 0 && (
           <div className="absolute z-10 mt-1 w-full bg-white py-2 px-3 text-gray-500 ring-1 ring-black/10 rounded">
             Нет совпадений
           </div>

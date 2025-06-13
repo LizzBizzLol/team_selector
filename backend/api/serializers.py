@@ -103,23 +103,50 @@ class TeamStudentDetailSerializer(serializers.ModelSerializer):
             return []
         requirements = project.skill_links.all()
         out = []
+        
         for req in requirements:
+            # Ищем точное совпадение навыка
             try:
-                lvl = StudentSkill.objects.get(student=student, skill=req.skill).level
+                student_skill = StudentSkill.objects.get(student=student, skill=req.skill)
+                matched_skill_name = req.skill.name
+                student_level = student_skill.level
+                score = min(student_level / req.level, 1) if req.level else 0
             except StudentSkill.DoesNotExist:
-                lvl = 0
-            score = min(lvl / req.level, 1) if req.level else 0
+                # Если точного совпадения нет, ищем ближайший навык
+                student_skills = student.skills.all()
+                best_match = None
+                best_score = 0
+                
+                for ss in student_skills:
+                    # Простая эвристика: если названия навыков похожи
+                    if (ss.skill.name.lower() in req.skill.name.lower() or 
+                        req.skill.name.lower() in ss.skill.name.lower()):
+                        score = min(ss.level / req.level, 1) if req.level else 0
+                        if score > best_score:
+                            best_score = score
+                            best_match = ss
+                
+                if best_match:
+                    matched_skill_name = best_match.skill.name
+                    student_level = best_match.level
+                    score = best_score
+                else:
+                    matched_skill_name = "Нет подходящего навыка"
+                    student_level = 0
+                    score = 0
+            
             out.append({
                 "skill_id": req.skill.id,
                 "skill_name": req.skill.name,
-                "student_level": lvl,
+                "matched_skill_name": matched_skill_name,
+                "student_level": student_level,
                 "required_level": req.level,
-                "score": round(score, 2),
+                "score": round(score, 4),
             })
         return out
 
 class TeamSerializer(serializers.ModelSerializer):
-    students = StudentSerializer(many=True, read_only=True)
+    students = serializers.SerializerMethodField()
 
     class Meta:
         model = Team
