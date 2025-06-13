@@ -39,11 +39,11 @@ export default function CreateProjectPage() {
   /* ---------- эффекты ---------- */
   /* общее кол-во студентов */
   useEffect(() => {
-    api.get("students/")
+    api.get("students/count/")
         .then(({data}) => {
-          const n = unwrap(data).length || 1;
+          const n = data.count || 1;
           setTotalStudents(n);
-          setMaxPart(n);
+          setMaxPart(1); // ✨ стартовое значение 1 вместо n
         })
         .catch(console.error);
   }, []);
@@ -122,7 +122,7 @@ export default function CreateProjectPage() {
       /* reset */
       setTitle(""); setCurator(null);
       setRequirements([{skill:null,level:1}]);
-      setMinPart(1); setMaxPart(totalStudents);
+      setMinPart(1); setMaxPart(1);
       fileInputRef.current.value="";
       setDirty(false);
     } catch(err){

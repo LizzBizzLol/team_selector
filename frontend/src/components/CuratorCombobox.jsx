@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 import { Combobox } from "@headlessui/react";
 import api from "../api";
 import { unwrap } from '../utils/unwrap';
-import { useUnsavedPrompt } from '../hooks/useUnsavedPrompt';
 
 export default function UserCombobox({ value, onChange, onDirty }) {
   const [query, setQuery] = useState("");

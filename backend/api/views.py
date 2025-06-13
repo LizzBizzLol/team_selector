@@ -57,6 +57,12 @@ class StudentViewSet(viewsets.ModelViewSet):
             qs = qs.filter(name__icontains=search)
         return qs.order_by("name")
 
+    @action(detail=False, methods=['get'])
+    def count(self, request):
+        """Получить общее количество студентов"""
+        total_count = Student.objects.count()
+        return Response({'count': total_count})
+
 class StudentSkillViewSet(viewsets.ModelViewSet):
     """
     CRUD для навыков студентов.
