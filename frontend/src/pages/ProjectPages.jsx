@@ -191,16 +191,19 @@ export default function CreateProjectPage() {
           <div key={i} className="flex gap-2 mb-2 items-center">
             <SkillCombobox value={r.skill}
                            onChange={v=>updateRequirement(i,"skill",v)}/>
-            <input type="number" min="1" max="5"
+            <input type="number" min="0" max="1" step="0.01"
                    className="border w-24 text-center px-3 py-2 rounded-lg focus:ring-2 focus:ring-blue-500"
                    value={r.level}
                    onChange={e=>{
-                     const val = Math.max(1, Math.min(5, +e.target.value || 1));
+                     let val = parseFloat(e.target.value.replace(',', '.'));
+                     if (isNaN(val)) val = 0;
+                     val = Math.max(0, Math.min(1, val));
                      updateRequirement(i,"level",val);
                    }}
                    onBlur={e=>{
-                     if (!e.target.value || +e.target.value < 1) {
-                       updateRequirement(i,"level",1);
+                     let val = parseFloat(e.target.value.replace(',', '.'));
+                     if (isNaN(val) || val < 0) {
+                       updateRequirement(i,"level",0);
                      }
                    }}
                    required/>
@@ -405,17 +408,20 @@ const handleMatch = async () => {
                                  const arr=[...reqs]; arr[i].skill=v;
                                  setReqs(arr); markDirty();
                                }}/>
-                <input type="number" min="1" max="5"
+                <input type="number" min="0" max="1" step="0.01"
                        className="border w-24 text-center px-3 py-2 rounded-lg focus:ring-2 focus:ring-blue-500"
                        value={r.level}
                        onChange={e=>{
-                         const val = Math.max(1, Math.min(5, +e.target.value || 1));
+                         let val = parseFloat(e.target.value.replace(',', '.'));
+                         if (isNaN(val)) val = 0;
+                         val = Math.max(0, Math.min(1, val));
                          const arr=[...reqs]; arr[i].level=val;
                          setReqs(arr); markDirty();
                        }}
                        onBlur={e=>{
-                         if (!e.target.value || +e.target.value < 1) {
-                           const arr=[...reqs]; arr[i].level=1;
+                         let val = parseFloat(e.target.value.replace(',', '.'));
+                         if (isNaN(val) || val < 0) {
+                           const arr=[...reqs]; arr[i].level=0;
                            setReqs(arr); markDirty();
                          }
                        }}

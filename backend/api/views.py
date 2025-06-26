@@ -173,7 +173,7 @@ class ProjectViewSet(viewsets.ModelViewSet):
         )
         if not created:
             link.level = level
-            link.save()
+            link.save(update_fields=["level"])
 
         return Response({"status": "added"}, status=status.HTTP_201_CREATED)
     
@@ -224,7 +224,7 @@ class ProjectViewSet(viewsets.ModelViewSet):
             return Response({"detail": "requirements должен быть списком"},
                             status=status.HTTP_400_BAD_REQUEST)
 
-        incoming = {int(it["skill"]): max(1, min(int(it.get("level", 1)), 5))
+        incoming = {int(it["skill"]): max(0, min(float(it.get("level", 0)), 1))
             for it in items
             if it.get("skill")}
 
@@ -350,8 +350,8 @@ class ProjectViewSet(viewsets.ModelViewSet):
         # Обрабатываем требования
         for item in data.get("requirements", []):
             name = item.get("skill") or item.get("skill_name")
-            level = int(item.get("level", 1))
-            level = max(1, min(5, level))
+            level = float(item.get("level", 0))
+            level = max(0, min(1, level))
             skill = Skill.objects.filter(name__iexact=name).first()
             if skill:
                 ProjectSkill.objects.create(

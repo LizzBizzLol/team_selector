@@ -2,13 +2,14 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
-// Функция: value от 0 до 1 — цвет от красного (0) до зелёного (1)
+// Функция для получения цвета в градиенте от красного к зелёному.
+// value: 0 (несоответствие) => красный
+// value: 1 (соответствие) => зелёный
 function getHeatmapColor(value) {
   // 0 — красный (0°), 1 — зелёный (120°)
-  // Можно сделать градиент и от красного через жёлтый к зелёному (0 → 60 → 120)
-  // но по умолчанию вот так:
+  // Промежуточные значения будут в жёлто-оранжевом диапазоне.
   const h = Math.round(120 * value); // hue: 0 (red) -> 120 (green)
-  return `hsl(${h}, 70%, 50%)`;
+  return `hsl(${h}, 100%, 45%)`;
 }
 
 // team — объект с students
@@ -47,7 +48,7 @@ export default function TeamHeatmap({ team, project }) {
                 )}
                 <br />
                 <span className="text-xs text-gray-500">
-                  уровень: {r.level}
+                  уровень: {Number(r.level).toFixed(2)}
                 </span>
               </th>
             ))}
@@ -74,18 +75,29 @@ export default function TeamHeatmap({ team, project }) {
                   let cellScore = 0;
                   let displayText = "—";
                   let tooltipText = "";
+                  let normalizedScore = 0;
+                  let coveragePercent = 0;
                   
                   if (skillInfo) {
+                    // Используем значение sim (score) напрямую
                     cellScore = skillInfo.score || 0;
                     count++;
                     totalScore += cellScore;
                     
+                    // Нормализуем относительно требуемого уровня
+                    // Если требуемый уровень 1, то это 100% покрытие
+                    const requiredLevel = r.level || 1;
+                    normalizedScore = cellScore / requiredLevel;
+                    
+                    // Вычисляем процент покрытия
+                    coveragePercent = Math.min(normalizedScore * 100, 100);
+                    
                     if (skillInfo.matched_skill_name) {
-                      displayText = `${Math.round(cellScore * 100)}%`;
-                      tooltipText = `${skillInfo.matched_skill_name} (${skillInfo.student_level}/${skillInfo.required_level})`;
+                      displayText = `${coveragePercent.toFixed(0)}%`; // Показываем процент покрытия
+                      tooltipText = `${skillInfo.matched_skill_name} (sim = ${cellScore.toFixed(4)}, покрытие: ${coveragePercent.toFixed(1)}%, уровень: ${skillInfo.student_level.toFixed(2)}/${requiredLevel.toFixed(2)})`;
                     } else {
-                      displayText = `${Math.round(cellScore * 100)}%`;
-                      tooltipText = `Уровень: ${skillInfo.student_level}/${skillInfo.required_level}`;
+                      displayText = `${coveragePercent.toFixed(0)}%`;
+                      tooltipText = `sim = ${cellScore.toFixed(4)}, покрытие: ${coveragePercent.toFixed(1)}%, уровень: ${skillInfo.student_level.toFixed(2)}/${requiredLevel.toFixed(2)}`;
                     }
                   }
                   
@@ -97,8 +109,8 @@ export default function TeamHeatmap({ team, project }) {
                       style={
                         typeof cellScore === "number" && cellScore > 0
                           ? {
-                              background: getHeatmapColor(cellScore),
-                              color: cellScore > 0.65 ? "#fff" : "#333",
+                              background: getHeatmapColor(Math.min(normalizedScore, 1)),
+                              color: Math.min(normalizedScore, 1) > 0.6 ? "#fff" : "#000",
                               transition: "background 0.3s",
                             }
                           : { background: "#f3f4f6", color: "#bbb" }
@@ -110,7 +122,7 @@ export default function TeamHeatmap({ team, project }) {
                 })}
                 <td className="px-3 py-2 text-center font-semibold">
                   {count > 0
-                    ? `${Math.round((totalScore / count) * 100)}%`
+                    ? `${((totalScore / count) * 100).toFixed(0)}%`
                     : "—"}
                 </td>
               </tr>

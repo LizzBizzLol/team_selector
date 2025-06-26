@@ -62,17 +62,17 @@ class ProjectSkill(models.Model):
         Skill,
         on_delete=models.CASCADE
     )
-    level = models.PositiveSmallIntegerField(
-        validators=[MinValueValidator(1), MaxValueValidator(5)]
-    )  # 1-5, валидируется на Django-уровне
+    level = models.FloatField(
+        validators=[MinValueValidator(0), MaxValueValidator(1)]
+    )  # 0-1, валидируется на Django-уровне
 
     class Meta:
         unique_together = ("project", "skill")
         ordering = ["skill__name"]
         constraints = [
             models.CheckConstraint(
-                check=models.Q(level__gte=1, level__lte=5),
-                name="projectskill_level_range_1_5"
+                check=models.Q(level__gte=0, level__lte=1),
+                name="projectskill_level_range_0_1"
             ),
         ]
 
@@ -115,3 +115,31 @@ class Team(models.Model):
 
     def __str__(self):
         return f"Team for {self.project} ({self.created_at:%Y-%m-%d})"
+
+
+# ─────────── Кэш путей между навыками ───────────
+class SkillPath(models.Model):
+    from_skill = models.ForeignKey(
+        Skill,
+        on_delete=models.CASCADE,
+        related_name="paths_from"
+    )
+    to_skill = models.ForeignKey(
+        Skill,
+        on_delete=models.CASCADE,
+        related_name="paths_to"
+    )
+    distance = models.FloatField()  # Расстояние в графе
+    path = models.JSONField()  # Список навыков в пути
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        unique_together = ("from_skill", "to_skill")
+        indexes = [
+            models.Index(fields=['from_skill', 'to_skill']),
+            models.Index(fields=['distance']),
+        ]
+
+    def __str__(self):
+        return f"{self.from_skill} → {self.to_skill} (dist: {self.distance:.4f})"

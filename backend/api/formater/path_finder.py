@@ -25,11 +25,31 @@ def find_min_path(graph_file, start_node, end_node):
         distance, path = find_min_path("graph_weights.json", "machine learning", "deep learning")
         print_path(distance, path)
     """
-    with open(graph_file, 'r', encoding='utf-8') as f:
-        graph = json.load(f)
-    distances, previous_nodes = dijkstra(graph, start_node)
+    try:
+        with open(graph_file, 'r', encoding='utf-8') as f:
+            graph = json.load(f)
+    except (FileNotFoundError, json.JSONDecodeError) as e:
+        print(f"Ошибка при загрузке графа: {e}")
+        return float('infinity'), []
+    
+    # Проверяем, что узлы существуют в графе
+    if start_node not in graph:
+        print(f"Узел '{start_node}' не найден в графе")
+        return float('infinity'), []
+    
+    if end_node not in graph:
+        print(f"Узел '{end_node}' не найден в графе")
+        return float('infinity'), []
+    
+    try:
+        distances, previous_nodes = dijkstra(graph, start_node)
+    except Exception as e:
+        print(f"Ошибка при выполнении алгоритма Дейкстры: {e}")
+        return float('infinity'), []
+    
     if distances[end_node] == float('infinity'):
         return float('infinity'), []
+    
     path = []
     current = end_node
     while current is not None:

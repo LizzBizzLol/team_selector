@@ -6,6 +6,8 @@ from .models import (
     ProjectSkill,
     StudentSkill, Team
 )
+from .matching import find_closest_skill
+import os
 
 class SkillSerializer(serializers.ModelSerializer):
     students_count = serializers.IntegerField(read_only=True)
@@ -104,36 +106,28 @@ class TeamStudentDetailSerializer(serializers.ModelSerializer):
         requirements = project.skill_links.all()
         out = []
         
+        # Путь к файлу с графом навыков
+        graph_file = os.path.join(os.path.dirname(__file__), "formater", "graph_weights.json")
+        
         for req in requirements:
-            # Ищем точное совпадение навыка
-            try:
-                student_skill = StudentSkill.objects.get(student=student, skill=req.skill)
-                matched_skill_name = req.skill.name
-                student_level = student_skill.level
-                score = min(student_level / req.level, 1) if req.level else 0
-            except StudentSkill.DoesNotExist:
-                # Если точного совпадения нет, ищем ближайший навык
-                student_skills = student.skills.all()
-                best_match = None
-                best_score = 0
-                
-                for ss in student_skills:
-                    # Простая эвристика: если названия навыков похожи
-                    if (ss.skill.name.lower() in req.skill.name.lower() or 
-                        req.skill.name.lower() in ss.skill.name.lower()):
-                        score = min(ss.level / req.level, 1) if req.level else 0
-                        if score > best_score:
-                            best_score = score
-                            best_match = ss
-                
-                if best_match:
-                    matched_skill_name = best_match.skill.name
-                    student_level = best_match.level
-                    score = best_score
-                else:
-                    matched_skill_name = "Нет подходящего навыка"
+            # Используем новый алгоритм подбора для вычисления sim
+            student_skills = student.skills.all()
+            closest_skill, normalized_weight, path = find_closest_skill(graph_file, student_skills, req)
+            
+            if closest_skill:
+                # Находим уровень студента для найденного навыка
+                try:
+                    student_skill = StudentSkill.objects.get(student=student, skill__name=closest_skill)
+                    student_level = student_skill.level
+                except StudentSkill.DoesNotExist:
                     student_level = 0
-                    score = 0
+                
+                matched_skill_name = closest_skill
+                sim = normalized_weight  # Это и есть значение sim
+            else:
+                matched_skill_name = "Нет подходящего навыка"
+                student_level = 0
+                sim = 0
             
             out.append({
                 "skill_id": req.skill.id,
@@ -141,7 +135,7 @@ class TeamStudentDetailSerializer(serializers.ModelSerializer):
                 "matched_skill_name": matched_skill_name,
                 "student_level": student_level,
                 "required_level": req.level,
-                "score": round(score, 4),
+                "score": round(sim, 4),  # Возвращаем sim вместо score
             })
         return out
 

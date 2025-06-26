@@ -1,0 +1,192 @@
+{
+  "project_info": {
+    "id": 34,
+    "title": "РАЗРАБОТКА СИСТЕМЫ МОНИТОРИНГА РАБОТЫ СОТРУДНИКОВ НА ПРЕДПРИЯТИИ “БИСКВИТНЫЙ ДВОР” (OPTISENSE)",
+    "curator": "Свиязов Алексей Николаевич",
+    "min_participants": 2,
+    "max_participants": 5,
+    "requirements": [
+      "CNN",
+      "Computer Vision",
+      "Deep Neural Networks",
+      "Image Processing",
+      "Python"
+    ]
+  },
+  "analysis_summary": {
+    "total_students_analyzed": 145,
+    "total_requirements": 5,
+    "analysis_timestamp": "2025-06-24T04:51:18.957797",
+    "cache_paths_used": 471
+  },
+  "team_results": {
+    "size": 2,
+    "min_required": 2,
+    "max_allowed": 5,
+    "requirements_covered": 4,
+    "total_requirements": 5,
+    "coverage_percentage": 80.0,
+    "all_requirements_covered": false,
+    "min_participants_met": true
+  },
+  "requirement_coverage": {
+    "CNN": {
+      "count": 34,
+      "percentage": 23.45,
+      "total_students": 145,
+      "covered_in_team": true,
+      "example_students": [
+        "Гиясов Никита Рушенович",
+        "Серов Никита Сергеевич",
+        "Абушев Хасан Ибрагимович",
+        "Астафьев Семен Михайлович",
+        "Блинов Никита Игоревич"
+      ]
+    },
+    "Computer Vision": {
+      "count": 0,
+      "percentage": 0.0,
+      "total_students": 145,
+      "covered_in_team": false,
+      "example_students": []
+    },
+    "Deep Neural Networks": {
+      "count": 134,
+      "percentage": 92.41,
+      "total_students": 145,
+      "covered_in_team": true,
+      "example_students": [
+        "Усачёва Елизавета Юрьевна",
+        "Швецов Никита Александрович",
+        "Гиясов Никита Рушенович",
+        "Асадулин Руслан Рамилевич",
+        "Серов Никита Сергеевич"
+      ]
+    },
+    "Image Processing": {
+      "count": 139,
+      "percentage": 95.86,
+      "total_students": 145,
+      "covered_in_team": true,
+      "example_students": [
+        "Усачёва Елизавета Юрьевна",
+        "Швецов Никита Александрович",
+        "Гиясов Никита Рушенович",
+        "Асадулин Руслан Рамилевич",
+        "Серов Никита Сергеевич"
+      ]
+    },
+    "Python": {
+      "count": 95,
+      "percentage": 65.52,
+      "total_students": 145,
+      "covered_in_team": true,
+      "example_students": [
+        "Серов Никита Сергеевич",
+        "Жиряков Валентин Станиславович",
+        "Абдиреуков Самат Талгатулы",
+        "Ануфриев Никита Александрович",
+        "Астафьев Семен Михайлович"
+      ]
+    }
+  },
+  "score_distribution": {
+    "excellent": {
+      "range": "0.8-1.0",
+      "count": 134,
+      "percentage": 92.41
+    },
+    "good": {
+      "range": "0.6-0.8",
+      "count": 2,
+      "percentage": 1.38
+    },
+    "satisfactory": {
+      "range": "0.4-0.6",
+      "count": 2,
+      "percentage": 1.38
+    },
+    "weak": {
+      "range": "0.2-0.4",
+      "count": 1,
+      "percentage": 0.69
+    },
+    "very_weak": {
+      "range": "0.0-0.2",
+      "count": 6,
+      "percentage": 4.14
+    }
+  },
+  "top_students": [
+    {
+      "rank": 1,
+      "name": "Астафьев Семен Михайлович",
+      "score": 2.7165,
+      "in_team": true
+    },
+    {
+      "rank": 2,
+      "name": "Ходырев Арсений Николаевич",
+      "score": 2.7165,
+      "in_team": true
+    },
+    {
+      "rank": 3,
+      "name": "Шушарин Дмитрий Владимирович",
+      "score": 2.7165,
+      "in_team": false
+    },
+    {
+      "rank": 4,
+      "name": "Блинов Никита Игоревич",
+      "score": 2.6406,
+      "in_team": false
+    },
+    {
+      "rank": 5,
+      "name": "Верёвкин Владимир Николаевич",
+      "score": 2.5937,
+      "in_team": false
+    },
+    {
+      "rank": 6,
+      "name": "Коровин Сергей Александрович",
+      "score": 2.5937,
+      "in_team": false
+    },
+    {
+      "rank": 7,
+      "name": "Гуртовенко Татьяна Николаевна",
+      "score": 2.5709,
+      "in_team": false
+    },
+    {
+      "rank": 8,
+      "name": "Казаков Артём Дживанович",
+      "score": 2.5339,
+      "in_team": false
+    },
+    {
+      "rank": 9,
+      "name": "Гусельников Илья Олегович",
+      "score": 2.5111,
+      "in_team": false
+    },
+    {
+      "rank": 10,
+      "name": "Бородина Валерия Александровна",
+      "score": 2.4937,
+      "in_team": false
+    }
+  ],
+  "selected_team": [
+    {
+      "name": "Астафьев Семен Михайлович",
+      "score": 2.7165
+    },
+    {
+      "name": "Ходырев Арсений Николаевич",
+      "score": 2.7165
+    }
+  ]
+}

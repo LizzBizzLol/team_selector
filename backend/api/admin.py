@@ -4,7 +4,7 @@ from django.contrib import admin
 from .models import (
     Curator, Student, Skill,
     Project, ProjectSkill,
-    StudentSkill, Team
+    StudentSkill, Team, SkillPath
 )
 
 admin.site.register(Curator)
@@ -17,6 +17,17 @@ admin.site.register(Project)
 admin.site.register(ProjectSkill)
 admin.site.register(StudentSkill)
 admin.site.register(Team)
+
+@admin.register(SkillPath)
+class SkillPathAdmin(admin.ModelAdmin):
+    list_display = ("from_skill", "to_skill", "distance", "created_at", "updated_at")
+    list_filter = ("created_at", "updated_at")
+    search_fields = ("from_skill__name", "to_skill__name")
+    readonly_fields = ("created_at", "updated_at")
+    ordering = ("-updated_at",)
+    
+    def get_queryset(self, request):
+        return super().get_queryset(request).select_related('from_skill', 'to_skill')
 
 admin.site.site_header = "Администрирование"
 admin.site.site_title = "Администрирование"

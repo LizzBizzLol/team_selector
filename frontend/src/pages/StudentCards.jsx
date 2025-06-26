@@ -2,7 +2,6 @@ import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import BackButton from "../components/BackButton";
 import api from "../api";
-import { level01to05 } from "../utils/level01to05";
 import { Link } from "react-router-dom";
 
 export default function StudentCard() {
@@ -42,7 +41,7 @@ export default function StudentCard() {
                       {s.skill_name}
                     </Link>
                   </td>
-                  <td className="px-3 py-2">{level01to05(s.level)}</td>
+                  <td className="px-3 py-2">{Number(s.level).toFixed(2)}</td>
                 </tr>
               ))}
             </tbody>

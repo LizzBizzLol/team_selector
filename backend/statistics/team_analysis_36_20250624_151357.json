@@ -1,0 +1,198 @@
+{
+  "project_info": {
+    "id": 36,
+    "title": "Разработка интерактивной образовательной платформы для централизованного хранения, управления и использования методических материалов",
+    "curator": "Гаврилова Наталия Михайловна",
+    "min_participants": 2,
+    "max_participants": 5,
+    "requirements": [
+      "Algorithms",
+      "NumPy",
+      "Parallel Programming",
+      "Python",
+      "Visualization"
+    ]
+  },
+  "analysis_summary": {
+    "total_students_analyzed": 145,
+    "total_requirements": 5,
+    "analysis_timestamp": "2025-06-24T15:13:57.486368",
+    "cache_paths_used": 454
+  },
+  "team_results": {
+    "size": 2,
+    "min_required": 2,
+    "max_allowed": 5,
+    "requirements_covered": 5,
+    "total_requirements": 5,
+    "coverage_percentage": 100.0,
+    "all_requirements_covered": true,
+    "min_participants_met": true
+  },
+  "requirement_coverage": {
+    "Algorithms": {
+      "count": 106,
+      "percentage": 73.1,
+      "total_students": 145,
+      "covered_in_team": true,
+      "example_students": [
+        "Усачёва Елизавета Юрьевна",
+        "Швецов Никита Александрович",
+        "Гиясов Никита Рушенович",
+        "Асадулин Руслан Рамилевич",
+        "Серов Никита Сергеевич"
+      ]
+    },
+    "NumPy": {
+      "count": 78,
+      "percentage": 53.79,
+      "total_students": 145,
+      "covered_in_team": true,
+      "example_students": [
+        "Усачёва Елизавета Юрьевна",
+        "Швецов Никита Александрович",
+        "Гиясов Никита Рушенович",
+        "Асадулин Руслан Рамилевич",
+        "Серов Никита Сергеевич"
+      ]
+    },
+    "Parallel Programming": {
+      "count": 139,
+      "percentage": 95.86,
+      "total_students": 145,
+      "covered_in_team": true,
+      "example_students": [
+        "Усачёва Елизавета Юрьевна",
+        "Швецов Никита Александрович",
+        "Гиясов Никита Рушенович",
+        "Асадулин Руслан Рамилевич",
+        "Серов Никита Сергеевич"
+      ]
+    },
+    "Python": {
+      "count": 18,
+      "percentage": 12.41,
+      "total_students": 145,
+      "covered_in_team": true,
+      "example_students": [
+        "Астафьев Семен Михайлович",
+        "Биримжанов Дамир Куаншевич",
+        "Блинов Никита Игоревич",
+        "Джамбеков Руслан Шарпудинович",
+        "Китаев Даниил Романович"
+      ]
+    },
+    "Visualization": {
+      "count": 142,
+      "percentage": 97.93,
+      "total_students": 145,
+      "covered_in_team": true,
+      "example_students": [
+        "Усачёва Елизавета Юрьевна",
+        "Швецов Никита Александрович",
+        "Гиясов Никита Рушенович",
+        "Асадулин Руслан Рамилевич",
+        "Серов Никита Сергеевич"
+      ]
+    }
+  },
+  "score_distribution": {
+    "excellent": {
+      "range": "0.8-1.0",
+      "count": 137,
+      "percentage": 94.48
+    },
+    "good": {
+      "range": "0.6-0.8",
+      "count": 2,
+      "percentage": 1.38
+    },
+    "satisfactory": {
+      "range": "0.4-0.6",
+      "count": 0,
+      "percentage": 0.0
+    },
+    "weak": {
+      "range": "0.2-0.4",
+      "count": 0,
+      "percentage": 0.0
+    },
+    "very_weak": {
+      "range": "0.0-0.2",
+      "count": 6,
+      "percentage": 4.14
+    }
+  },
+  "top_students": [
+    {
+      "rank": 1,
+      "name": "Ламина Мария Викторовна",
+      "score": 3.5203,
+      "in_team": true
+    },
+    {
+      "rank": 2,
+      "name": "Блинов Никита Игоревич",
+      "score": 3.4292,
+      "in_team": true
+    },
+    {
+      "rank": 3,
+      "name": "Кузнецов Виктор Вячеславович",
+      "score": 3.3988,
+      "in_team": false
+    },
+    {
+      "rank": 4,
+      "name": "Джамбеков Руслан Шарпудинович",
+      "score": 3.395,
+      "in_team": false
+    },
+    {
+      "rank": 5,
+      "name": "Астафьев Семен Михайлович",
+      "score": 2.762,
+      "in_team": false
+    },
+    {
+      "rank": 6,
+      "name": "Ходырев Арсений Николаевич",
+      "score": 2.7317,
+      "in_team": false
+    },
+    {
+      "rank": 7,
+      "name": "Шушарин Дмитрий Владимирович",
+      "score": 2.7317,
+      "in_team": false
+    },
+    {
+      "rank": 8,
+      "name": "Уткин Дмитрий Сергеевич",
+      "score": 2.7241,
+      "in_team": false
+    },
+    {
+      "rank": 9,
+      "name": "Швецов Никита Владимирович",
+      "score": 2.7013,
+      "in_team": false
+    },
+    {
+      "rank": 10,
+      "name": "Китаев Даниил Романович",
+      "score": 2.6975,
+      "in_team": false
+    }
+  ],
+  "selected_team": [
+    {
+      "name": "Ламина Мария Викторовна",
+      "score": 3.5203
+    },
+    {
+      "name": "Блинов Никита Игоревич",
+      "score": 3.4292
+    }
+  ]
+}
